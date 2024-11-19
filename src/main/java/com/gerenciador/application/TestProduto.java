@@ -1,15 +1,14 @@
 package com.gerenciador.application;
 
-import com.gerenciador.model.dao.CategoriaDao;
 import com.gerenciador.model.dao.DaoFactory;
 import com.gerenciador.model.dao.ProdutoDao;
-import com.gerenciador.model.entities.Categoria;
 import com.gerenciador.model.entities.Produto;
 
-public class Main {
+import java.sql.SQLOutput;
+
+public class TestProduto {
     public static void main(String[] args) {
         ProdutoDao produtoDao = DaoFactory.createProdutoDao();
-        CategoriaDao categoriaDao = DaoFactory.createCategoriaDao();
 
         System.out.println("----- Test Procedure Cadastro Produto -----");
 
@@ -21,14 +20,21 @@ public class Main {
                 4500.00
         );
         produtoDao.insert(produto);
+        System.out.println();
 
-        System.out.println("----- Test Procedure Cadastro Categoria -----");
+        System.out.println("----- Test Update Produto -----");
 
-        Categoria categoria = new Categoria(
-                "Produtos de higiene",
-                "Produtos para higiene pessoal"
+        Produto produtoToUpdate = new Produto(
+                6,
+                "Notebook Editado",
+                "Notebook Dell Inspiron 15 com 16GB de RAM e 512GB SSD",
+                50,
+                3500.00,
+                4500.00
         );
-        categoriaDao.insert(categoria);
+        produtoDao.update(produtoToUpdate);
+
+
 
     }
 }

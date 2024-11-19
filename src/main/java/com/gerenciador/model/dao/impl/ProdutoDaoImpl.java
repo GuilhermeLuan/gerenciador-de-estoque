@@ -1,12 +1,12 @@
 package com.gerenciador.model.dao.impl;
 
+import com.gerenciador.db.DB;
+import com.gerenciador.db.DbExecption;
 import com.gerenciador.model.dao.ProdutoDao;
 import com.gerenciador.model.entities.Categoria;
 import com.gerenciador.model.entities.Produto;
 
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.List;
 
 public class ProdutoDaoImpl implements ProdutoDao {
@@ -37,7 +37,38 @@ public class ProdutoDaoImpl implements ProdutoDao {
 
     @Override
     public void update(Produto obj) {
+        PreparedStatement ps = null;
+        try {
+            String sql =
+                    """
+                            UPDATE mydb.Produto
+                            SET NomeProduto   = ?,
+                                Descricao     = ?,
+                                QtdEstoque    = ?,
+                                PrecoDeCompra = ?,
+                                PrecoDeVenda  = ?
+                            WHERE IdProduto = ?;
+                    """;
 
+
+            ps = conn.prepareStatement(
+                    sql,
+                    Statement.RETURN_GENERATED_KEYS
+            );
+
+            ps.setString(1,obj.getNomeProduto());
+            ps.setString(2,obj.getDescricao());
+            ps.setInt(3,obj.getQtdEstoque());
+            ps.setDouble(4,obj.getPrecoDeCompra());
+            ps.setDouble(5,obj.getPrecoDeVenda());
+            ps.setInt(6,obj.getIdProduto());
+
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new DbExecption(e.getMessage());
+        } finally {
+            DB.closeStatement(ps);
+        }
     }
 
     @Override
