@@ -22,6 +22,14 @@ public class Produto {
         this.precoDeVenda = precoDeVenda;
     }
 
+    public Produto(String nomeProduto, String descricao, Integer qtdEstoque, Double precoDeCompra, Double precoDeVenda) {
+        this.nomeProduto = nomeProduto;
+        this.descricao = descricao;
+        this.qtdEstoque = qtdEstoque;
+        this.precoDeCompra = precoDeCompra;
+        this.precoDeVenda = precoDeVenda;
+    }
+
     public Integer getIdProduto() {
         return idProduto;
     }
@@ -70,59 +78,16 @@ public class Produto {
         this.precoDeVenda = precoDeVenda;
     }
 
-
-    public static final class ProdutoBuilder {
-        private Integer idProduto;
-        private String nomeProduto;
-        private String descricao;
-        private Integer qtdEstoque;
-        private Double precoDeCompra;
-        private Double precoDeVenda;
-
-        private ProdutoBuilder() {}
-
-        public static ProdutoBuilder aProduto() {return new ProdutoBuilder();}
-
-        public ProdutoBuilder withIdProduto(Integer idProduto) {
-            this.idProduto = idProduto;
-            return this;
-        }
-
-        public ProdutoBuilder withNomeProduto(String nomeProduto) {
-            this.nomeProduto = nomeProduto;
-            return this;
-        }
-
-        public ProdutoBuilder withDescricao(String descricao) {
-            this.descricao = descricao;
-            return this;
-        }
-
-        public ProdutoBuilder withQtdEstoque(Integer qtdEstoque) {
-            this.qtdEstoque = qtdEstoque;
-            return this;
-        }
-
-        public ProdutoBuilder withPrecoDeCompra(Double precoDeCompra) {
-            this.precoDeCompra = precoDeCompra;
-            return this;
-        }
-
-        public ProdutoBuilder withPrecoDeVenda(Double precoDeVenda) {
-            this.precoDeVenda = precoDeVenda;
-            return this;
-        }
-
-        public Produto build() {
-            Produto produto = new Produto();
-            produto.setIdProduto(idProduto);
-            produto.setNomeProduto(nomeProduto);
-            produto.setDescricao(descricao);
-            produto.setQtdEstoque(qtdEstoque);
-            produto.setPrecoDeCompra(precoDeCompra);
-            produto.setPrecoDeVenda(precoDeVenda);
-            return produto;
-        }
+    @Override
+    public String toString() {
+        return "Produto{" +
+                "idProduto=" + idProduto +
+                ", nomeProduto='" + nomeProduto + '\'' +
+                ", descricao='" + descricao + '\'' +
+                ", qtdEstoque=" + qtdEstoque +
+                ", precoDeCompra=" + precoDeCompra +
+                ", precoDeVenda=" + precoDeVenda +
+                '}';
     }
 
     @Override

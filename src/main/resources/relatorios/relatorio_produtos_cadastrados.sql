@@ -1,0 +1,6 @@
+DELIMITER //
+CREATE PROCEDURE RelatorioDeProdutos()
+BEGIN
+    SELECT * FROM Produto;
+END //
+DELIMITER ;
