@@ -7,6 +7,7 @@ import com.gerenciador.model.entities.Categoria;
 import com.gerenciador.model.entities.Produto;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProdutoDaoImpl implements ProdutoDao {
@@ -96,13 +97,42 @@ public class ProdutoDaoImpl implements ProdutoDao {
 
     @Override
     public Produto findById(Integer id) {
-        return null;
+        String sql = "SELECT * FROM Produto WHERE IdProduto = ?";
+        Produto produto = null;
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    produto = instantiateProduto(rs);
+                }
+            }
+        } catch (SQLException e) {
+            throw new DbExecption(e.getMessage());
+        }
+
+        return produto;
     }
 
     @Override
     public List<Produto> findByNome(String nome) {
-        return List.of();
+        String sql = "SELECT * FROM Produto WHERE NomeProduto LIKE ?";
+        List<Produto> produtos = new ArrayList<>();
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, "%" + nome + "%");
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    produtos.add(instantiateProduto(rs));
+                }
+            }
+        } catch (SQLException e) {
+            throw new DbExecption(e.getMessage());
+        }
+
+        return produtos;
     }
+
 
     @Override
     public List<Produto> findAll() {
@@ -117,5 +147,16 @@ public class ProdutoDaoImpl implements ProdutoDao {
     @Override
     public List<Produto> findByQtdEstoque(Integer qtdEstoque) {
         return List.of();
+    }
+
+    private Produto instantiateProduto(ResultSet rs) throws SQLException {
+        Produto produto = new Produto();
+        produto.setIdProduto(rs.getInt("IdProduto"));
+        produto.setNomeProduto(rs.getString("NomeProduto"));
+        produto.setDescricao(rs.getString("Descricao"));
+        produto.setQtdEstoque(rs.getInt("QtdEstoque"));
+        produto.setPrecoDeCompra(rs.getDouble("PrecoDeCompra"));
+        produto.setPrecoDeVenda(rs.getDouble("PrecoDeVenda"));
+        return produto;
     }
 }

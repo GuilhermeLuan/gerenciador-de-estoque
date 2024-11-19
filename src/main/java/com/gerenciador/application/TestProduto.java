@@ -5,6 +5,7 @@ import com.gerenciador.model.dao.ProdutoDao;
 import com.gerenciador.model.entities.Produto;
 
 import java.sql.SQLOutput;
+import java.util.List;
 
 public class TestProduto {
     public static void main(String[] args) {
@@ -33,9 +34,23 @@ public class TestProduto {
                 4500.00
         );
         produtoDao.update(produtoToUpdate);
+        System.out.println();
+
 
         System.out.println("----- Test Delete Produto -----");
         produtoDao.deleteById(6);
+        System.out.println();
+
+
+        System.out.println("----- Test FindById Produto -----");
+        Produto produto1 = produtoDao.findById(1);
+        System.out.println(produto1);
+        System.out.println();
+
+        System.out.println("----- Test FindByName Produto -----");
+        List<Produto> notebook = produtoDao.findByNome("Sabonete");
+        notebook.forEach(System.out::println);
+        System.out.println();
 
     }
 }
