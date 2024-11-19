@@ -34,7 +34,8 @@ public class TestProduto {
         );
         produtoDao.update(produtoToUpdate);
 
-
+        System.out.println("----- Test Delete Produto -----");
+        produtoDao.deleteById(6);
 
     }
 }
