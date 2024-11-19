@@ -1,11 +1,13 @@
 package com.gerenciador.service;
 
+import com.gerenciador.db.DB;
+import com.gerenciador.db.DbExecption;
+import com.gerenciador.model.entities.Movimentacao;
 import com.gerenciador.model.entities.Produto;
 
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Relatorio {
 
@@ -38,6 +40,57 @@ public class Relatorio {
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao executar Relatorio de Produtos Cadastrados: " + e.getMessage(), e);
         }
+    }
+
+    public void movimentacaoEstoque() {
+        PreparedStatement preparedStatement = null;
+        ResultSet rs = null;
+
+        try {
+
+            String sql = """
+                    SELECT m.idMovimentacao   AS IDMovimentação,
+                           p.NomeProduto      AS Produto,
+                           m.EntradaDeProduto AS Entrada,
+                           m.SaidaDeProduto   AS Saída,
+                           m.QtdEstoque       AS EstoqueAtual,
+                           m.Movimentacaocol  AS Detalhes
+                    FROM Movimentacao m
+                             JOIN
+                         Produto p ON m.idProduto = p.IdProduto
+                    ORDER BY m.idMovimentacao DESC;""";
+
+            preparedStatement = conn.prepareStatement(sql);
+            rs = preparedStatement.executeQuery();
+
+
+            while (rs.next()) {
+                int idMovimentacao = rs.getInt("IDMovimentação");
+                String produto = rs.getString("Produto");
+                Integer entrada = rs.getInt("Entrada");
+                Integer saida = rs.getInt("Saída");
+                Integer estoqueAtual = rs.getInt("EstoqueAtual");
+                String detalhes = rs.getString("Detalhes");
+
+
+                System.out.println("===============================================");
+                System.out.println("ID Movimentação: " + idMovimentacao);
+                System.out.println("Produto: " + produto);
+                System.out.println("Entrada: " + entrada);
+                System.out.println("Saída: " + saida);
+                System.out.println("Estoque Atual: " + estoqueAtual);
+                System.out.println("Detalhes: " + detalhes);
+                System.out.println("===============================================");
+
+            }
+
+        } catch (SQLException e) {
+            throw new DbExecption(e.getMessage());
+        } finally {
+            DB.closeStatement(preparedStatement);
+            DB.closeResultSet(rs);
+        }
+
     }
 
     public void vendasELucros() {
