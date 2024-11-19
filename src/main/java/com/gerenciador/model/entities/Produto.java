@@ -80,15 +80,16 @@ public class Produto {
 
     @Override
     public String toString() {
-        return "Produto{" +
-                "idProduto=" + idProduto +
-                ", nomeProduto='" + nomeProduto + '\'' +
-                ", descricao='" + descricao + '\'' +
-                ", qtdEstoque=" + qtdEstoque +
-                ", precoDeCompra=" + precoDeCompra +
-                ", precoDeVenda=" + precoDeVenda +
+        return "Produto {" + System.lineSeparator() +
+                "    ID Produto: " + idProduto + "," + System.lineSeparator() +
+                "    Nome Produto: '" + nomeProduto + "'," + System.lineSeparator() +
+                "    Descrição: '" + descricao + "'," + System.lineSeparator() +
+                "    Quantidade em Estoque: " + qtdEstoque + "," + System.lineSeparator() +
+                "    Preço de Compra: R$" + precoDeCompra + "," + System.lineSeparator() +
+                "    Preço de Venda: R$" + precoDeVenda + System.lineSeparator() +
                 '}';
     }
+
 
     @Override
     public final boolean equals(Object o) {

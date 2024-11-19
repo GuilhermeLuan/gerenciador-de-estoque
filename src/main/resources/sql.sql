@@ -129,7 +129,7 @@ BEGIN
            NomeProduto AS 'Nome do Produto',
            QtdEstoque  AS 'Quantidade em Estoque'
     FROM Produto
-    WHERE QtdEstoque < limite;
+    WHERE QtdEstoque < estoqueMinimo;
 END //
 DELIMITER ;
 

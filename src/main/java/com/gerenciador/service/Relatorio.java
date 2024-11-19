@@ -93,6 +93,45 @@ public class Relatorio {
 
     }
 
+    public void relatorioBaixoEstoque(int estoqueMinimo) {
+        PreparedStatement preparedStatement = null;
+        ResultSet rs = null;
+
+        try {
+            String sql = """
+                SELECT p.IdProduto       AS ID,
+                       p.NomeProduto     AS NomeProduto,
+                       p.QtdEstoque      AS QtdEstoque
+                FROM Produto p
+                WHERE p.QtdEstoque < ?
+                ORDER BY p.QtdEstoque ASC;""";
+
+            preparedStatement = conn.prepareStatement(sql);
+            preparedStatement.setInt(1, estoqueMinimo);
+            rs = preparedStatement.executeQuery();
+
+            System.out.println("======== Relatório de Produtos com Baixo Estoque ========");
+            while (rs.next()) {
+                int idProduto = rs.getInt("ID");
+                String nomeProduto = rs.getString("NomeProduto");
+                int qtdEstoque = rs.getInt("QtdEstoque");
+
+                System.out.println("-----------------------------------------------");
+                System.out.println("ID Produto: " + idProduto);
+                System.out.println("Nome Produto: " + nomeProduto);
+                System.out.println("Quantidade em Estoque: " + qtdEstoque);
+                System.out.println("-----------------------------------------------");
+            }
+
+        } catch (SQLException e) {
+            throw new DbExecption(e.getMessage());
+        } finally {
+            DB.closeStatement(preparedStatement);
+            DB.closeResultSet(rs);
+        }
+    }
+
+
     public void vendasELucros() {
         String sql = "{CALL RelatorioVendasELucro()}";
 

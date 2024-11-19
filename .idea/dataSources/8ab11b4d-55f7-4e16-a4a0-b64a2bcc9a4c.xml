@@ -1073,7 +1073,7 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
       <CollationName>utf8mb3_general_ci</CollationName>
     </schema>
     <schema id="289" parent="1" name="mydb">
-      <LastIntrospectionLocalTimestamp>2024-11-19.21:16:04</LastIntrospectionLocalTimestamp>
+      <LastIntrospectionLocalTimestamp>2024-11-19.22:54:07</LastIntrospectionLocalTimestamp>
       <CollationName>utf8mb3_general_ci</CollationName>
     </schema>
     <schema id="290" parent="1" name="mysql">
@@ -1123,7 +1123,7 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
     <routine id="301" parent="289" name="RelatorioBaixoEstoque">
       <Definer>root@%</Definer>
       <RoutineKind>procedure</RoutineKind>
-      <SourceTextLength>184</SourceTextLength>
+      <SourceTextLength>191</SourceTextLength>
     </routine>
     <routine id="302" parent="289" name="RelatorioDeProdutos">
       <Definer>root@%</Definer>
