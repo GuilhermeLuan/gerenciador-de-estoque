@@ -136,17 +136,63 @@ public class ProdutoDaoImpl implements ProdutoDao {
 
     @Override
     public List<Produto> findAll() {
-        return List.of();
+        String sql = "SELECT * FROM Produto";
+        List<Produto> produtos = new ArrayList<>();
+
+        try (PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                produtos.add(instantiateProduto(rs));
+            }
+        } catch (SQLException e) {
+            throw new DbExecption(e.getMessage());
+        }
+
+        return produtos;
     }
 
     @Override
     public List<Produto> findByCategoria(Categoria categoria) {
-        return List.of();
+        String sql = """
+                SELECT p.*\s
+                FROM Produto p
+                JOIN Produto_has_Categoria pc ON p.IdProduto = pc.Produto_IdProduto
+                WHERE pc.Categoria_idCategoria = ?;
+               \s""";
+
+        List<Produto> produtos = new ArrayList<>();
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, categoria.getIdCategoria());
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    produtos.add(instantiateProduto(rs));
+                }
+            }
+        } catch (SQLException e) {
+            throw new DbExecption(e.getMessage());
+        }
+
+        return produtos;
     }
 
     @Override
     public List<Produto> findByQtdEstoque(Integer qtdEstoque) {
-        return List.of();
+        String sql = "SELECT * FROM Produto WHERE QtdEstoque <= ?";
+        List<Produto> produtos = new ArrayList<>();
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, qtdEstoque);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    produtos.add(instantiateProduto(rs));
+                }
+            }
+        } catch (SQLException e) {
+            throw new DbExecption(e.getMessage());
+        }
+
+        return produtos;
     }
 
     private Produto instantiateProduto(ResultSet rs) throws SQLException {

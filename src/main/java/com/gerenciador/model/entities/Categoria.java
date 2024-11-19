@@ -5,6 +5,12 @@ public class Categoria {
     private String nomeCategoria;
     private String descricao;
 
+    public Categoria(int idCategoria, String nomeCategoria, String descricao) {
+        this.idCategoria = idCategoria;
+        this.nomeCategoria = nomeCategoria;
+        this.descricao = descricao;
+    }
+
     public Categoria(String nomeCategoria, String descricao) {
         this.nomeCategoria = nomeCategoria;
         this.descricao = descricao;
