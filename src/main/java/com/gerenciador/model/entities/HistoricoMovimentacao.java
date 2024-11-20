@@ -104,15 +104,15 @@ public class HistoricoMovimentacao {
     @Override
     public String toString() {
         return "HistoricoMovimentacao{" +
-                "idHistorico=" + idHistorico +
-                ", idProduto=" + idProduto +
-                ", nomeProduto='" + nomeProduto + '\'' +
-                ", qtdAntes=" + qtdAntes +
-                ", qtdDepois=" + qtdDepois +
-                ", tipoMovimentacao='" + tipoMovimentacao + '\'' +
-                ", quantidade=" + quantidade +
-                ", dataMovimentacao=" + dataMovimentacao +
-                '}';
+               "idHistorico=" + idHistorico +
+               ", idProduto=" + idProduto +
+               ", nomeProduto='" + nomeProduto + '\'' +
+               ", qtdAntes=" + qtdAntes +
+               ", qtdDepois=" + qtdDepois +
+               ", tipoMovimentacao='" + tipoMovimentacao + '\'' +
+               ", quantidade=" + quantidade +
+               ", dataMovimentacao=" + dataMovimentacao +
+               '}';
     }
 
     @Override

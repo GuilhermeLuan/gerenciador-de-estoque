@@ -1,4 +1,5 @@
 package com.gerenciador.model.entities;
+
 import java.util.Objects;
 
 public class Movimentacao {
@@ -80,13 +81,13 @@ public class Movimentacao {
     @Override
     public String toString() {
         return "Movimentacao{" +
-                "idMovimentacao=" + idMovimentacao +
-                ", idProduto=" + idProduto +
-                ", qtdEstoque=" + qtdEstoque +
-                ", entradaDeProduto=" + entradaDeProduto +
-                ", saidaDeProduto=" + saidaDeProduto +
-                ", movimentacaoCol='" + movimentacaoCol + '\'' +
-                '}';
+               "idMovimentacao=" + idMovimentacao +
+               ", idProduto=" + idProduto +
+               ", qtdEstoque=" + qtdEstoque +
+               ", entradaDeProduto=" + entradaDeProduto +
+               ", saidaDeProduto=" + saidaDeProduto +
+               ", movimentacaoCol='" + movimentacaoCol + '\'' +
+               '}';
     }
 
     @Override

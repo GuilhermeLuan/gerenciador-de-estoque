@@ -188,8 +188,8 @@ DELIMITER ;
 -- chamando a procedure
 -- call CadastrarCategoria('Produtos de higiene', 'Produtos para higiene pessoal');
 -- conferindo a inserção
-select *
-from Categoria;
+# select *
+# from Categoria;
 
 
 -- trigger para Verificar Estoque Baixo: ao atualizar a quantidade em estoque de um Produto, deve ser disparado um alerta se a quantidad estiver abaixo do mínimo.

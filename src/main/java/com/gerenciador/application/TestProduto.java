@@ -1,11 +1,11 @@
 package com.gerenciador.application;
 
+import com.gerenciador.db.DbExecption;
 import com.gerenciador.model.dao.DaoFactory;
 import com.gerenciador.model.dao.ProdutoDao;
 import com.gerenciador.model.entities.Categoria;
 import com.gerenciador.model.entities.Produto;
 
-import java.sql.SQLOutput;
 import java.util.List;
 
 public class TestProduto {
@@ -26,16 +26,20 @@ public class TestProduto {
 
         System.out.println("----- Test Update Produto -----");
 
-        Produto produtoToUpdate = new Produto(
-                6,
-                "Notebook Editado",
-                "Notebook Dell Inspiron 15 com 16GB de RAM e 512GB SSD",
-                9,
-                3500.00,
-                4500.00
-        );
-        produtoDao.update(produtoToUpdate);
-        System.out.println();
+        try {
+            Produto produtoToUpdate = new Produto(
+                    5,
+                    "Notebook Editado",
+                    "Notebook Dell Inspiron 15 com 16GB de RAM e 512GB SSD",
+                    11,
+                    3500.00,
+                    4500.00
+            );
+            produtoDao.update(produtoToUpdate);
+            System.out.println(produtoToUpdate.getNomeProduto() + " Atualizado com sucesso!");
+        } catch (DbExecption e) {
+            System.out.println(e.getMessage());
+        }
 
 
         System.out.println("----- Test Delete Produto -----");
@@ -68,7 +72,7 @@ public class TestProduto {
 
 
         System.out.println("----- Test FindByQtd Estoque -----");
-        List<Produto> produtosByQtdEstoque = produtoDao.findByQtdEstoque(9);
+        List<Produto> produtosByQtdEstoque = produtoDao.findByQtdEstoque(10);
         produtosByQtdEstoque.forEach(System.out::println);
         System.out.println();
     }

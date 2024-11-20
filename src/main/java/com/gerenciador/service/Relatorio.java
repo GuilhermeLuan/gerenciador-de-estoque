@@ -2,12 +2,9 @@ package com.gerenciador.service;
 
 import com.gerenciador.db.DB;
 import com.gerenciador.db.DbExecption;
-import com.gerenciador.model.entities.Movimentacao;
 import com.gerenciador.model.entities.Produto;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Relatorio {
 
@@ -99,12 +96,12 @@ public class Relatorio {
 
         try {
             String sql = """
-                SELECT p.IdProduto       AS ID,
-                       p.NomeProduto     AS NomeProduto,
-                       p.QtdEstoque      AS QtdEstoque
-                FROM Produto p
-                WHERE p.QtdEstoque < ?
-                ORDER BY p.QtdEstoque ASC;""";
+                    SELECT p.IdProduto       AS ID,
+                           p.NomeProduto     AS NomeProduto,
+                           p.QtdEstoque      AS QtdEstoque
+                    FROM Produto p
+                    WHERE p.QtdEstoque < ?
+                    ORDER BY p.QtdEstoque ASC;""";
 
             preparedStatement = conn.prepareStatement(sql);
             preparedStatement.setInt(1, estoqueMinimo);

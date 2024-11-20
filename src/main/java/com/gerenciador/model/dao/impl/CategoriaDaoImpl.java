@@ -4,7 +4,6 @@ import com.gerenciador.db.DB;
 import com.gerenciador.db.DbExecption;
 import com.gerenciador.model.dao.CategoriaDao;
 import com.gerenciador.model.entities.Categoria;
-import com.gerenciador.model.entities.Produto;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -38,11 +37,11 @@ public class CategoriaDaoImpl implements CategoriaDao {
         try {
             String sql =
                     """
-                    UPDATE Categoria
-                    SET NomeCategoria = ?,
-                        Descricao = ?
-                    WHERE idCategoria = ?;
-                   """;
+                             UPDATE Categoria
+                             SET NomeCategoria = ?,
+                                 Descricao = ?
+                             WHERE idCategoria = ?;
+                            """;
 
 
             ps = conn.prepareStatement(
@@ -50,9 +49,9 @@ public class CategoriaDaoImpl implements CategoriaDao {
                     Statement.RETURN_GENERATED_KEYS
             );
 
-            ps.setString(1,obj.getNomeCategoria());
-            ps.setString(2,obj.getDescricao());
-            ps.setInt(3,obj.getIdCategoria());
+            ps.setString(1, obj.getNomeCategoria());
+            ps.setString(2, obj.getDescricao());
+            ps.setInt(3, obj.getIdCategoria());
 
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -110,7 +109,6 @@ public class CategoriaDaoImpl implements CategoriaDao {
 
         return categorias;
     }
-
 
 
     private Categoria instantiateCategoria(ResultSet rs) throws SQLException {

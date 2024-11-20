@@ -2,8 +2,6 @@ package com.gerenciador.application;
 
 import com.gerenciador.model.dao.CategoriaDao;
 import com.gerenciador.model.dao.DaoFactory;
-import com.gerenciador.model.dao.CategoriaDao;
-import com.gerenciador.model.entities.Categoria;
 import com.gerenciador.model.entities.Categoria;
 
 import java.util.List;
@@ -34,7 +32,7 @@ public class TestCategoria {
 
 
         System.out.println("----- Test Delete Categoria -----");
-        categoriaDao.deleteById(13);
+        categoriaDao.deleteById(6);
         //DELETE ON CASCATE
         System.out.println();
 
@@ -43,7 +41,6 @@ public class TestCategoria {
         Categoria byId = categoriaDao.findById(1);
         System.out.println(byId);
         System.out.println();
-
 
 
         System.out.println("----- Test FindAll Categoria -----");

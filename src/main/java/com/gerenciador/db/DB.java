@@ -8,21 +8,22 @@ import java.util.Properties;
 public class DB {
 
     private static Connection connection = null;
-    public static Connection getConnection(){
-        if(connection == null){
+
+    public static Connection getConnection() {
+        if (connection == null) {
             try {
                 Properties properties = loadProperties();
                 String url = properties.getProperty("dburl");
                 connection = DriverManager.getConnection(url, properties);
-            } catch (SQLException e){
+            } catch (SQLException e) {
                 throw new DbExecption(e.getMessage());
             }
         }
         return connection;
     }
 
-    public static void closeConnection(){
-        if(connection != null){
+    public static void closeConnection() {
+        if (connection != null) {
             try {
                 connection.close();
             } catch (SQLException e) {
@@ -31,8 +32,8 @@ public class DB {
         }
     }
 
-    public static void closeStatement(Statement statement){
-        if(statement != null){
+    public static void closeStatement(Statement statement) {
+        if (statement != null) {
             try {
                 statement.close();
             } catch (SQLException e) {
@@ -41,8 +42,8 @@ public class DB {
         }
     }
 
-    public static void closeResultSet(ResultSet resultSet){
-        if(resultSet != null){
+    public static void closeResultSet(ResultSet resultSet) {
+        if (resultSet != null) {
             try {
                 resultSet.close();
             } catch (SQLException e) {
@@ -51,12 +52,12 @@ public class DB {
         }
     }
 
-    public static Properties loadProperties(){
+    public static Properties loadProperties() {
         Properties properties = new Properties();
-        try (FileInputStream fileInputStream = new FileInputStream("src/main/resources/db.properties")){
+        try (FileInputStream fileInputStream = new FileInputStream("src/main/resources/db.properties")) {
             properties.load(fileInputStream);
             return properties;
-        } catch (IOException e){
+        } catch (IOException e) {
             throw new DbExecption(e.getMessage());
         }
     }

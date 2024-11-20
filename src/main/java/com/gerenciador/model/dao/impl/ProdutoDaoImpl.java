@@ -42,14 +42,14 @@ public class ProdutoDaoImpl implements ProdutoDao {
         try {
             String sql =
                     """
-                            UPDATE mydb.Produto
-                            SET NomeProduto   = ?,
-                                Descricao     = ?,
-                                QtdEstoque    = ?,
-                                PrecoDeCompra = ?,
-                                PrecoDeVenda  = ?
-                            WHERE IdProduto = ?;
-                    """;
+                                    UPDATE mydb.Produto
+                                    SET NomeProduto   = ?,
+                                        Descricao     = ?,
+                                        QtdEstoque    = ?,
+                                        PrecoDeCompra = ?,
+                                        PrecoDeVenda  = ?
+                                    WHERE IdProduto = ?;
+                            """;
 
 
             ps = conn.prepareStatement(
@@ -57,12 +57,12 @@ public class ProdutoDaoImpl implements ProdutoDao {
                     Statement.RETURN_GENERATED_KEYS
             );
 
-            ps.setString(1,obj.getNomeProduto());
-            ps.setString(2,obj.getDescricao());
-            ps.setInt(3,obj.getQtdEstoque());
-            ps.setDouble(4,obj.getPrecoDeCompra());
-            ps.setDouble(5,obj.getPrecoDeVenda());
-            ps.setInt(6,obj.getIdProduto());
+            ps.setString(1, obj.getNomeProduto());
+            ps.setString(2, obj.getDescricao());
+            ps.setInt(3, obj.getQtdEstoque());
+            ps.setDouble(4, obj.getPrecoDeCompra());
+            ps.setDouble(5, obj.getPrecoDeVenda());
+            ps.setInt(6, obj.getIdProduto());
 
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -84,7 +84,7 @@ public class ProdutoDaoImpl implements ProdutoDao {
         try {
             ps = conn.prepareStatement(
                     "DELETE FROM Produto\n" +
-                            "WHERE IdProduto = ?");
+                    "WHERE IdProduto = ?");
             ps.setInt(1, id);
             ps.executeUpdate();
 
@@ -154,11 +154,11 @@ public class ProdutoDaoImpl implements ProdutoDao {
     @Override
     public List<Produto> findByCategoria(Categoria categoria) {
         String sql = """
-                SELECT p.*\s
-                FROM Produto p
-                JOIN Produto_has_Categoria pc ON p.IdProduto = pc.Produto_IdProduto
-                WHERE pc.Categoria_idCategoria = ?;
-               \s""";
+                 SELECT p.*\s
+                 FROM Produto p
+                 JOIN Produto_has_Categoria pc ON p.IdProduto = pc.Produto_IdProduto
+                 WHERE pc.Categoria_idCategoria = ?;
+                \s""";
 
         List<Produto> produtos = new ArrayList<>();
 
