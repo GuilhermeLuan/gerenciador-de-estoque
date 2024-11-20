@@ -43,38 +43,13 @@ public class Categoria {
         this.descricao = descricao;
     }
 
-
-    public static final class CategoriaBuilder {
-        private int idCategoria;
-        private String nomeCategoria;
-        private String descricao;
-
-        private CategoriaBuilder() {}
-
-        public static CategoriaBuilder aCategoria() {return new CategoriaBuilder();}
-
-        public CategoriaBuilder withIdCategoria(int idCategoria) {
-            this.idCategoria = idCategoria;
-            return this;
-        }
-
-        public CategoriaBuilder withNomeCategoria(String nomeCategoria) {
-            this.nomeCategoria = nomeCategoria;
-            return this;
-        }
-
-        public CategoriaBuilder withDescricao(String descricao) {
-            this.descricao = descricao;
-            return this;
-        }
-
-        public Categoria build() {
-            Categoria categoria = new Categoria();
-            categoria.setIdCategoria(idCategoria);
-            categoria.setNomeCategoria(nomeCategoria);
-            categoria.setDescricao(descricao);
-            return categoria;
-        }
+    @Override
+    public String toString() {
+        return "Categoria {" + System.lineSeparator() +
+               "    ID Categoria: " + idCategoria + "," + System.lineSeparator() +
+               "    Nome Categoria: '" + nomeCategoria + "'," + System.lineSeparator() +
+               "    Descrição: '" + descricao + "'" + System.lineSeparator() +
+               '}';
     }
 
     @Override

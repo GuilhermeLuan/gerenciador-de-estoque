@@ -7,6 +7,7 @@ import com.gerenciador.model.entities.Categoria;
 import com.gerenciador.model.entities.Produto;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CategoriaDaoImpl implements CategoriaDao {
@@ -75,14 +76,41 @@ public class CategoriaDaoImpl implements CategoriaDao {
 
     @Override
     public Categoria findById(Integer id) {
-        return null;
+        String sql = "SELECT * FROM Categoria WHERE idCategoria = ?";
+        Categoria categoria = null;
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    categoria = instantiateCategoria(rs);
+                }
+            }
+        } catch (SQLException e) {
+            throw new DbExecption(e.getMessage());
+        }
+
+        return categoria;
     }
 
 
     @Override
     public List<Categoria> findAll() {
-        return List.of();
+        String sql = "SELECT * FROM Categoria";
+        List<Categoria> categorias = new ArrayList<>();
+
+        try (PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                categorias.add(instantiateCategoria(rs));
+            }
+        } catch (SQLException e) {
+            throw new DbExecption(e.getMessage());
+        }
+
+        return categorias;
     }
+
 
 
     private Categoria instantiateCategoria(ResultSet rs) throws SQLException {

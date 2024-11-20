@@ -34,32 +34,22 @@ public class TestCategoria {
 
 
         System.out.println("----- Test Delete Categoria -----");
-        //categoriaDao.deleteById(1);
+        categoriaDao.deleteById(13);
         //DELETE ON CASCATE
         System.out.println();
 
 
         System.out.println("----- Test FindById Categoria -----");
-
+        Categoria byId = categoriaDao.findById(1);
+        System.out.println(byId);
         System.out.println();
 
-        System.out.println("----- Test FindByName Categoria -----");
-
-        System.out.println();
 
 
         System.out.println("----- Test FindAll Categoria -----");
-
+        List<Categoria> all = categoriaDao.findAll();
+        all.forEach(System.out::println);
         System.out.println();
 
-
-        System.out.println("----- Test FindByCategoria Categoria -----");
-
-        System.out.println();
-
-
-        System.out.println("----- Test FindByQtd Estoque -----");
-
-        System.out.println();
     }
 }
