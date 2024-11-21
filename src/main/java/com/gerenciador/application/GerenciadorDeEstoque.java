@@ -160,6 +160,7 @@ public class GerenciadorDeEstoque {
 
     private static void cadastrarProduto(Scanner scanner) {
         ProdutoDao produtoDao = DaoFactory.createProdutoDao();
+        CategoriaDao categoriaDao = DaoFactory.createCategoriaDao();
 
         try {
             System.out.println("----- Cadastrar Produto -----");
@@ -179,8 +180,38 @@ public class GerenciadorDeEstoque {
             System.out.print("Digite o preço de venda: ");
             double precoDeVenda = scanner.nextDouble();
 
-            System.out.print("Digite o ID da categoria: ");
-            int idCategoria = scanner.nextInt();
+//            System.out.print("Digite o ID da categoria: ");
+//            int idCategoria = scanner.nextInt();
+
+            System.out.print("Digite o nome da categoria: ");
+            scanner.nextLine();
+            String nomeDaCategoria = scanner.nextLine();
+            Categoria categoria = categoriaDao.findByName(nomeDaCategoria);
+
+            if (categoria == null) {
+                // TODO -- Associar a categoria criada a tabela produto has categoria.
+
+                System.out.println("Categoria não encontrada. Vamos criar uma nova categoria para o produto.");
+
+
+                System.out.print("Digite a descrição da nova categoria: ");
+                String descricaoCategoria = scanner.nextLine();
+
+                Categoria novaCategoria = new Categoria(nomeDaCategoria, descricaoCategoria);
+
+                categoriaDao.insert(novaCategoria);
+
+                System.out.printf("Nova categoria '%s' criada com sucesso!\n", novaCategoria.getNomeCategoria());
+
+//                List<Categoria> categorias = categoriaDao.findByNome(nomeCategoria);
+//                if (!categorias.isEmpty()) {
+//                    categoria = categorias.get(0); // Assume que o nome da categoria é único
+//                    System.out.printf("Categoria '%s' associada ao produto.\n", categoria.getNomeCategoria());
+//                } else {
+//                    System.out.println("Erro: Não foi possível associar a nova categoria ao produto.");
+//                }
+            }
+
 
             Produto produto = new Produto(nomeProduto, descricao, qtdEstoque, precoDeCompra, precoDeVenda);
             produtoDao.insert(produto);
@@ -289,7 +320,7 @@ public class GerenciadorDeEstoque {
                     List<Produto> produtos = produtoDao.findByCategoria(categoria);
 
                     if(produtos.isEmpty()) {
-                        System.out.printf("Nenhum produto encontrado da categoria %s!\n", categoria.getNomeCategoria());
+                        System.out.printf("Nenhum produto encontrado da categoria %s!%n", categoria.getNomeCategoria());
                     }
 
                     produtos.forEach(System.out::println);
