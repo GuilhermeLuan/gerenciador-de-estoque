@@ -92,6 +92,25 @@ public class CategoriaDaoImpl implements CategoriaDao {
         return categoria;
     }
 
+    @Override
+    public Categoria findByName(String name) {
+        String sql = "SELECT * FROM Categoria WHERE NomeCategoria = ?";
+        Categoria categoria = null;
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, name);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    categoria = instantiateCategoria(rs);
+                }
+            }
+        } catch (SQLException e) {
+            throw new DbExecption(e.getMessage());
+        }
+
+        return categoria;
+    }
+
 
     @Override
     public List<Categoria> findAll() {

@@ -13,5 +13,7 @@ public interface CategoriaDao {
 
     Categoria findById(Integer id);
 
+    Categoria findByName(String name);
+
     List<Categoria> findAll();
 }
