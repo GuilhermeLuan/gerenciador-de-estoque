@@ -375,14 +375,29 @@ public class GerenciadorDeEstoque {
     private static void consultarCategoria(Scanner scanner) {
         CategoriaDao categoriaDao = DaoFactory.createCategoriaDao();
         try {
-            System.out.println("Função de consultar categoria ainda não implementada.");
+
+            System.out.println("----- Consultar Categoria -----");
+            System.out.println("1. Consultar por nome");
+            System.out.println("2. Listar todos");
+            System.out.print("Escolha uma opção: ");
 
             int opcao = scanner.nextInt();
 
             switch (opcao) {
                 case 1 -> {
-                    System.out.print("Digite o ID do produto: ");
-                    int idProduto = scanner.nextInt();
+                    System.out.print("Digite o nome da categoria: ");
+                    scanner.nextLine();
+                    String nomeProduto = scanner.nextLine();
+                    Categoria categoriaDaoByName = categoriaDao.findByName(nomeProduto);
+
+                    if(categoriaDaoByName == null) {
+                        System.out.println("Categoria não encontrada!");
+                        return;
+                    }
+
+                    System.out.println(categoriaDaoByName);
+                }
+                case 2 -> {
                     List<Categoria> categoria = categoriaDao.findAll();
                     categoria.forEach(System.out::println);
                 }
