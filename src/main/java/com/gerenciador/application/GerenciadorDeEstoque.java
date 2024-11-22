@@ -312,10 +312,7 @@ public class GerenciadorDeEstoque {
 
                     Categoria categoria = categoriaDao.findByName(nomeCategoria);
 
-                    if(categoria == null) {
-                        System.out.println("Categoria não encontrada!");
-                        return;
-                    }
+                    if (assertCategoriaExistByName(categoria)) return;
 
                     List<Produto> produtos = produtoDao.findByCategoria(categoria);
 
@@ -375,6 +372,9 @@ public class GerenciadorDeEstoque {
             System.out.print("Digite o ID da categoria a ser editada: ");
             int idCategoria = scanner.nextInt();
 
+            if (assertCategoriaExits(categoriaDao, idCategoria)) return;
+
+
             System.out.print("Digite o novo nome da categoria: ");
             scanner.nextLine(); 
             String nomeCategoria = scanner.nextLine();
@@ -396,7 +396,14 @@ public class GerenciadorDeEstoque {
     private static void excluirCategoria(Scanner scanner) {
         CategoriaDao categoriaDao = DaoFactory.createCategoriaDao();
         try {
-            System.out.println("Função de excluir categoria ainda não implementada.");
+            System.out.println("----- Excluir Categoria -----");
+            System.out.print("Digite o ID da categoria a ser excluida: ");
+            int idCategoria = scanner.nextInt();
+
+            if (assertCategoriaExits(categoriaDao, idCategoria)) return;
+
+            categoriaDao.deleteById(idCategoria);
+
         } catch (InputMismatchException e) {
             System.out.println("Entrada inválida! Por favor, insira um número.");
             scanner.nextLine(); // Limpa o buffer
@@ -421,10 +428,7 @@ public class GerenciadorDeEstoque {
                     String nomeProduto = scanner.nextLine();
                     Categoria categoriaDaoByName = categoriaDao.findByName(nomeProduto);
 
-                    if(categoriaDaoByName == null) {
-                        System.out.println("Categoria não encontrada!");
-                        return;
-                    }
+                    if (assertCategoriaExistByName(categoriaDaoByName)) return;
 
                     System.out.println(categoriaDaoByName);
                 }
@@ -468,5 +472,22 @@ public class GerenciadorDeEstoque {
     private static void gerarRelatorioVendasLucro() {
         System.out.println("Relatório de vendas e lucro (baseado no preço de compra e venda)");
         relatorio.vendasELucros();
+    }
+
+
+    private static boolean assertCategoriaExits(CategoriaDao categoriaDao, int idCategoria) {
+        if (categoriaDao.findById(idCategoria) == null) {
+            System.out.println("Categoria não encontrada!");
+            return true;
+        }
+        return false;
+    }
+
+    private static boolean assertCategoriaExistByName(Categoria categoria) {
+        if(categoria == null) {
+            System.out.println("Categoria não encontrada!");
+            return true;
+        }
+        return false;
     }
 }
