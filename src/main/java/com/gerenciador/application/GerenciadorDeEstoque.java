@@ -255,23 +255,6 @@ public class GerenciadorDeEstoque {
         }
     }
 
-    private static boolean assertThatDescriptionIsNotEmpty(String descricao) {
-        if (descricao.trim().isEmpty()) {
-            System.out.println("A descrição do produto não pode estar vazio.");
-            return true;
-        }
-        return false;
-    }
-
-    private static boolean assertThatNameIsNotEmpty(String nomeProduto) {
-        if (nomeProduto.trim().isEmpty()) {
-            System.out.println("O nome do produto não pode estar vazio.");
-            return true;
-        }
-        return false;
-    }
-
-
     private static void editarProduto(Scanner scanner) {
         try {
             ProdutoDao produtoDao = DaoFactory.createProdutoDao();
@@ -405,8 +388,12 @@ public class GerenciadorDeEstoque {
             scanner.nextLine(); 
             String nomeCategoria = scanner.nextLine();
 
+            assertThatNameIsNotEmpty(nomeCategoria);
+
             System.out.print("Digite a descrição da categoria: ");
             String descricao = scanner.nextLine();
+
+            assertThatDescriptionIsNotEmpty(descricao);
 
             Categoria categoria = new Categoria(nomeCategoria, descricao);
             categoriaDao.insert(categoria);
@@ -429,13 +416,16 @@ public class GerenciadorDeEstoque {
 
             if (assertCategoriaExits(categoriaDao, idCategoria)) return;
 
-
             System.out.print("Digite o novo nome da categoria: ");
             scanner.nextLine(); 
             String nomeCategoria = scanner.nextLine();
 
+            assertThatNameIsNotEmpty(nomeCategoria);
+
             System.out.print("Digite a nova descrição da categoria: ");
             String descricao = scanner.nextLine();
+
+            assertThatDescriptionIsNotEmpty(descricao);
 
             Categoria categoria = new Categoria(idCategoria, nomeCategoria, descricao);
             categoriaDao.update(categoria);
@@ -457,6 +447,7 @@ public class GerenciadorDeEstoque {
 
             if (assertCategoriaExits(categoriaDao, idCategoria)) return;
 
+            System.out.println("Categoria excluida com sucesso!");
             categoriaDao.deleteById(idCategoria);
 
         } catch (InputMismatchException e) {
@@ -511,7 +502,15 @@ public class GerenciadorDeEstoque {
 
     private static void gerarRelatorioProdutos() {
         System.out.println("Relatório de Produtos Cadastrados");
-        relatorio.produtosCadastrados();
+
+
+        List<Produto> produtos = relatorio.produtosCadastrados();
+        if(produtos.isEmpty()){
+            System.out.println("Nenhum produto foi cadastrado.");
+            return;
+        }
+
+        produtos.forEach(System.out::println);
     }
 
     private static void gerarRelatorioMovimentacao() {
@@ -541,6 +540,22 @@ public class GerenciadorDeEstoque {
     private static boolean assertCategoriaExistByName(Categoria categoria) {
         if(categoria == null) {
             System.out.println("Categoria não encontrada!");
+            return true;
+        }
+        return false;
+    }
+
+    private static boolean assertThatDescriptionIsNotEmpty(String descricao) {
+        if (descricao.trim().isEmpty()) {
+            System.out.println("A descrição não pode estar vazio.");
+            return true;
+        }
+        return false;
+    }
+
+    private static boolean assertThatNameIsNotEmpty(String nome) {
+        if (nome.trim().isEmpty()) {
+            System.out.println("O nome não pode estar vazio.");
             return true;
         }
         return false;

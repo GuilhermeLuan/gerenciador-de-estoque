@@ -5,6 +5,8 @@ import com.gerenciador.db.DbExecption;
 import com.gerenciador.model.entities.Produto;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Relatorio {
 
@@ -14,8 +16,10 @@ public class Relatorio {
         this.conn = conn;
     }
 
-    public void produtosCadastrados() {
+    public List<Produto> produtosCadastrados() {
         String sql = "{CALL RelatorioDeProdutos()}";
+
+        List<Produto> produtos = new ArrayList<>();
 
         try (CallableStatement stmt = conn.prepareCall(sql)) {
             ResultSet rs = stmt.executeQuery();
@@ -30,10 +34,10 @@ public class Relatorio {
 
                 Produto produto = new Produto(produtoID, nome, descricao, quantidade, precoDeCompra, precoDeVenda);
 
-                System.out.println(produto);
+                produtos.add(produto);
 
             }
-
+            return produtos;
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao executar Relatorio de Produtos Cadastrados: " + e.getMessage(), e);
         }
