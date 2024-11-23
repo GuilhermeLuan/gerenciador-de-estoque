@@ -168,17 +168,36 @@ public class GerenciadorDeEstoque {
             scanner.nextLine(); 
             String nomeProduto = scanner.nextLine();
 
+            if (assertThatNameIsNotEmpty(nomeProduto)) return;
+
             System.out.print("Digite a descrição do produto: ");
             String descricao = scanner.nextLine();
+
+            if (assertThatDescriptionIsNotEmpty(descricao)) return;
 
             System.out.print("Digite a quantidade em estoque: ");
             int qtdEstoque = scanner.nextInt();
 
+            if (qtdEstoque < 0) {
+                System.out.println("A quantiade em estoque não pode ser menor do 0");
+                return;
+            }
+
             System.out.print("Digite o preço de compra: ");
             double precoDeCompra = scanner.nextDouble();
 
+            if (precoDeCompra < 0) {
+                System.out.println("O preço de compra não pode ser menor do 0");
+                return;
+            }
+
             System.out.print("Digite o preço de venda: ");
             double precoDeVenda = scanner.nextDouble();
+
+            if (precoDeVenda < 0) {
+                System.out.println("O preço de venda não pode ser menor do 0");
+                return;
+            }
 
 //            System.out.print("Digite o ID da categoria: ");
 //            int idCategoria = scanner.nextInt();
@@ -186,6 +205,12 @@ public class GerenciadorDeEstoque {
             System.out.print("Digite o nome da categoria: ");
             scanner.nextLine();
             String nomeDaCategoria = scanner.nextLine();
+
+            if (nomeDaCategoria.trim().isEmpty()) {
+                System.out.println("O nome do categoria não pode estar vazio.");
+                return;
+            }
+
             Categoria categoria = categoriaDao.findByName(nomeDaCategoria);
 
             if (categoria == null) {
@@ -197,11 +222,16 @@ public class GerenciadorDeEstoque {
                 System.out.print("Digite a descrição da nova categoria: ");
                 String descricaoCategoria = scanner.nextLine();
 
+                if (descricaoCategoria.trim().isEmpty()) {
+                    System.out.println("A descrição da categoria não pode estar vazio.");
+                    return;
+                }
+
                 Categoria novaCategoria = new Categoria(nomeDaCategoria, descricaoCategoria);
 
                 categoriaDao.insert(novaCategoria);
 
-                System.out.printf("Nova categoria '%s' criada com sucesso!\n", novaCategoria.getNomeCategoria());
+                System.out.printf("Nova categoria '%s' criada com sucesso!%n", novaCategoria.getNomeCategoria());
 
 //                List<Categoria> categorias = categoriaDao.findByNome(nomeCategoria);
 //                if (!categorias.isEmpty()) {
@@ -225,6 +255,22 @@ public class GerenciadorDeEstoque {
         }
     }
 
+    private static boolean assertThatDescriptionIsNotEmpty(String descricao) {
+        if (descricao.trim().isEmpty()) {
+            System.out.println("A descrição do produto não pode estar vazio.");
+            return true;
+        }
+        return false;
+    }
+
+    private static boolean assertThatNameIsNotEmpty(String nomeProduto) {
+        if (nomeProduto.trim().isEmpty()) {
+            System.out.println("O nome do produto não pode estar vazio.");
+            return true;
+        }
+        return false;
+    }
+
 
     private static void editarProduto(Scanner scanner) {
         try {
@@ -234,12 +280,21 @@ public class GerenciadorDeEstoque {
             System.out.print("Digite o ID do produto a ser editado: ");
             int idProduto = scanner.nextInt();
 
+            if (idProduto < 0) {
+                System.out.println("O id não pode ser menor do 0");
+                return;
+            }
+
             System.out.print("Digite o novo nome do produto: ");
             scanner.nextLine(); 
             String nomeProduto = scanner.nextLine();
 
+            if (assertThatNameIsNotEmpty(nomeProduto)) return;
+
             System.out.print("Digite a nova descrição do produto: ");
             String descricao = scanner.nextLine();
+
+            if (assertThatDescriptionIsNotEmpty(nomeProduto)) return;
 
             System.out.print("Digite a nova quantidade em estoque: ");
             int qtdEstoque = scanner.nextInt();

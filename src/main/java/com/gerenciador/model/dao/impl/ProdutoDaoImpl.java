@@ -10,16 +10,25 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementação da interface ProdutoDao.
+ * Esta classe gerencia as operações CRUD relacionadas à Produto.
+ */
 public class ProdutoDaoImpl implements ProdutoDao {
+
+    // Conexão com o banco de dados
     private Connection conn;
 
     public ProdutoDaoImpl(Connection conn) {
         this.conn = conn;
     }
 
+    /**
+     * Insere um novo Produto no banco de dados utilizando um Stored Procedure.
+     */
     @Override
     public void insert(Produto obj) {
-        String sql = "{CALL CadastrarProdutos(?, ?, ?, ?, ?)}";
+        String sql = "{CALL CadastrarProdutos(?, ?, ?, ?, ?)}"; // Chama a stored procedure
 
         try (CallableStatement stmt = conn.prepareCall(sql)) {
             stmt.setString(1, obj.getNomeProduto());
@@ -36,10 +45,14 @@ public class ProdutoDaoImpl implements ProdutoDao {
         }
     }
 
+    /**
+     * Atualiza os dados de um Produto.
+     */
     @Override
     public void update(Produto obj) {
         PreparedStatement ps = null;
         try {
+            // Query SQL para atualizar os dados do produto
             String sql =
                     """
                                     UPDATE mydb.Produto
@@ -51,11 +64,14 @@ public class ProdutoDaoImpl implements ProdutoDao {
                                     WHERE IdProduto = ?;
                             """;
 
+            // Prepara a instrução SQL
 
             ps = conn.prepareStatement(
                     sql,
                     Statement.RETURN_GENERATED_KEYS
             );
+
+            // Define os valores dos parâmetros
 
             ps.setString(1, obj.getNomeProduto());
             ps.setString(2, obj.getDescricao());
@@ -63,6 +79,8 @@ public class ProdutoDaoImpl implements ProdutoDao {
             ps.setDouble(4, obj.getPrecoDeCompra());
             ps.setDouble(5, obj.getPrecoDeVenda());
             ps.setInt(6, obj.getIdProduto());
+
+            // Executa a atualização
 
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -77,6 +95,9 @@ public class ProdutoDaoImpl implements ProdutoDao {
 
     }
 
+    /**
+     * Remove um Produto com base no ID fornecido.
+     */
     @Override
     public void deleteById(Integer id) {
         PreparedStatement ps = null;
@@ -85,8 +106,8 @@ public class ProdutoDaoImpl implements ProdutoDao {
             ps = conn.prepareStatement(
                     "DELETE FROM Produto\n" +
                     "WHERE IdProduto = ?");
-            ps.setInt(1, id);
-            ps.executeUpdate();
+            ps.setInt(1, id); // Define o ID da produto a ser deletada
+            ps.executeUpdate(); // Executa a exclusão
 
         } catch (SQLException e) {
             throw new DbExecption(e.getMessage());
@@ -94,17 +115,20 @@ public class ProdutoDaoImpl implements ProdutoDao {
             DB.closeStatement(ps);
         }
     }
-
+    
+    /**
+     * Busca um Produto com base no ID fornecido.
+     */
     @Override
     public Produto findById(Integer id) {
         String sql = "SELECT * FROM Produto WHERE IdProduto = ?";
         Produto produto = null;
 
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, id);
+        try (PreparedStatement ps = conn.prepareStatement(sql)) { 
+            ps.setInt(1, id); // Define o ID da produto
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    produto = instantiateProduto(rs);
+                    produto = instantiateProduto(rs); // Instancia a produto com os dados retornados
                 }
             }
         } catch (SQLException e) {
@@ -113,7 +137,10 @@ public class ProdutoDaoImpl implements ProdutoDao {
 
         return produto;
     }
-
+    
+    /**
+     * Busca um Produto com base no Nome.
+     */
     @Override
     public List<Produto> findByNome(String nome) {
         String sql = "SELECT * FROM Produto WHERE NomeProduto LIKE ?";
@@ -133,7 +160,9 @@ public class ProdutoDaoImpl implements ProdutoDao {
         return produtos;
     }
 
-
+    /**
+     * Busca todas as Categorias.
+     */
     @Override
     public List<Produto> findAll() {
         String sql = "SELECT * FROM Produto";
@@ -141,6 +170,8 @@ public class ProdutoDaoImpl implements ProdutoDao {
 
         try (PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
+            // Itera sobre os resultados e adiciona os produtos à lista
+
             while (rs.next()) {
                 produtos.add(instantiateProduto(rs));
             }
@@ -151,6 +182,10 @@ public class ProdutoDaoImpl implements ProdutoDao {
         return produtos;
     }
 
+
+    /**
+     * Busca um Produto com base na Categoria.
+     */
     @Override
     public List<Produto> findByCategoria(Categoria categoria) {
         String sql = """
@@ -176,6 +211,9 @@ public class ProdutoDaoImpl implements ProdutoDao {
         return produtos;
     }
 
+    /**
+     * Busca um Produto com base no Nome.
+     */
     @Override
     public List<Produto> findByQtdEstoque(Integer qtdEstoque) {
         String sql = "SELECT * FROM Produto WHERE QtdEstoque <= ?";
@@ -195,6 +233,9 @@ public class ProdutoDaoImpl implements ProdutoDao {
         return produtos;
     }
 
+    /**
+     * Método auxiliar para instanciar um objeto Produto a partir de um ResultSet.
+     */
     private Produto instantiateProduto(ResultSet rs) throws SQLException {
         Produto produto = new Produto();
         produto.setIdProduto(rs.getInt("IdProduto"));
