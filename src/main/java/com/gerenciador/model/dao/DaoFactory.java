@@ -2,6 +2,7 @@ package com.gerenciador.model.dao;
 
 import com.gerenciador.db.DB;
 import com.gerenciador.model.dao.impl.CategoriaDaoImpl;
+import com.gerenciador.model.dao.impl.MovimentacaoEstoqueDaoImpl;
 import com.gerenciador.model.dao.impl.ProdutoDaoImpl;
 import com.gerenciador.model.dao.impl.ProdutoHasCategoriaDaoImpl;
 import com.gerenciador.service.Relatorio;
@@ -35,5 +36,13 @@ public class DaoFactory {
      */
     public static Relatorio createRelatorio() {
         return new Relatorio(DB.getConnection());
+    }
+
+    /**
+     * Cria e retorna uma instância de MovimentacaoEstoqueDAO
+     */
+
+    public static MovimentacaoEstoqueDAO createMovimentacaoEstoque() {
+        return new MovimentacaoEstoqueDaoImpl(DB.getConnection());
     }
 }

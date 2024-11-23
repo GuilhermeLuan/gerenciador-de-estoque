@@ -1073,7 +1073,7 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
       <CollationName>utf8mb3_general_ci</CollationName>
     </schema>
     <schema id="289" parent="1" name="mydb">
-      <LastIntrospectionLocalTimestamp>2024-11-23.13:45:53</LastIntrospectionLocalTimestamp>
+      <LastIntrospectionLocalTimestamp>2024-11-23.20:40:04</LastIntrospectionLocalTimestamp>
       <CollationName>utf8mb3_general_ci</CollationName>
     </schema>
     <schema id="290" parent="1" name="mysql">
@@ -1120,276 +1120,342 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
       <RoutineKind>procedure</RoutineKind>
       <SourceTextLength>177</SourceTextLength>
     </routine>
-    <routine id="301" parent="289" name="RelatorioBaixoEstoque">
+    <routine id="301" parent="289" name="RegistrarMovimentacao">
+      <Definer>root@%</Definer>
+      <RoutineKind>procedure</RoutineKind>
+      <SourceTextLength>1138</SourceTextLength>
+    </routine>
+    <routine id="302" parent="289" name="RelatorioBaixoEstoque">
       <Definer>root@%</Definer>
       <RoutineKind>procedure</RoutineKind>
       <SourceTextLength>191</SourceTextLength>
     </routine>
-    <routine id="302" parent="289" name="RelatorioDeProdutos">
+    <routine id="303" parent="289" name="RelatorioDeProdutos">
       <Definer>root@%</Definer>
       <RoutineKind>procedure</RoutineKind>
       <SourceTextLength>36</SourceTextLength>
     </routine>
-    <routine id="303" parent="289" name="RelatorioVendasELucro">
+    <routine id="304" parent="289" name="RelatorioVendasELucro">
       <Definer>root@%</Definer>
       <RoutineKind>procedure</RoutineKind>
       <SourceTextLength>717</SourceTextLength>
     </routine>
-    <table id="304" parent="289" name="Categoria">
+    <table id="305" parent="289" name="Categoria">
       <Engine>InnoDB</Engine>
       <CollationName>utf8mb3_general_ci</CollationName>
     </table>
-    <table id="305" parent="289" name="HistoricoMovimentacao">
+    <table id="306" parent="289" name="HistoricoMovimentacao">
       <Engine>InnoDB</Engine>
       <CollationName>utf8mb3_general_ci</CollationName>
     </table>
-    <table id="306" parent="289" name="Movimentacao">
+    <table id="307" parent="289" name="Movimentacao">
       <Engine>InnoDB</Engine>
       <CollationName>utf8mb3_general_ci</CollationName>
     </table>
-    <table id="307" parent="289" name="Produto">
+    <table id="308" parent="289" name="MovimentacaoEstoque">
       <Engine>InnoDB</Engine>
       <CollationName>utf8mb3_general_ci</CollationName>
     </table>
-    <table id="308" parent="289" name="Produto_has_Categoria">
+    <table id="309" parent="289" name="Produto">
       <Engine>InnoDB</Engine>
       <CollationName>utf8mb3_general_ci</CollationName>
     </table>
-    <argument id="309" parent="299" name="NomeCategoria">
+    <table id="310" parent="289" name="Produto_has_Categoria">
+      <Engine>InnoDB</Engine>
+      <CollationName>utf8mb3_general_ci</CollationName>
+    </table>
+    <argument id="311" parent="299" name="NomeCategoria">
       <Position>1</Position>
       <StoredType>varchar(100)|0s</StoredType>
     </argument>
-    <argument id="310" parent="299" name="Descricao">
+    <argument id="312" parent="299" name="Descricao">
       <Position>2</Position>
       <StoredType>text|0s</StoredType>
     </argument>
-    <argument id="311" parent="300" name="NomeProduto">
+    <argument id="313" parent="300" name="NomeProduto">
       <Position>1</Position>
       <StoredType>varchar(100)|0s</StoredType>
     </argument>
-    <argument id="312" parent="300" name="Descricao">
+    <argument id="314" parent="300" name="Descricao">
       <Position>2</Position>
       <StoredType>text|0s</StoredType>
     </argument>
-    <argument id="313" parent="300" name="QtdEstoque">
+    <argument id="315" parent="300" name="QtdEstoque">
       <Position>3</Position>
       <StoredType>int unsigned|0s</StoredType>
     </argument>
-    <argument id="314" parent="300" name="PrecoDeCompra">
+    <argument id="316" parent="300" name="PrecoDeCompra">
       <Position>4</Position>
       <StoredType>decimal(10,2 digit)|0s</StoredType>
     </argument>
-    <argument id="315" parent="300" name="PrecoDeVenda">
+    <argument id="317" parent="300" name="PrecoDeVenda">
       <Position>5</Position>
       <StoredType>decimal(10,2 digit)|0s</StoredType>
     </argument>
-    <argument id="316" parent="301" name="estoqueMinimo">
+    <argument id="318" parent="301" name="p_produto_id">
       <Position>1</Position>
       <StoredType>int|0s</StoredType>
     </argument>
-    <column id="317" parent="304" name="idCategoria">
+    <argument id="319" parent="301" name="p_tipo_movimentacao">
+      <Position>2</Position>
+      <StoredType>enum(&apos;ENTRADA&apos;, &apos;SAIDA&apos;)|0e</StoredType>
+    </argument>
+    <argument id="320" parent="301" name="p_quantidade">
+      <Position>3</Position>
+      <StoredType>int|0s</StoredType>
+    </argument>
+    <argument id="321" parent="302" name="estoqueMinimo">
+      <Position>1</Position>
+      <StoredType>int|0s</StoredType>
+    </argument>
+    <column id="322" parent="305" name="idCategoria">
       <AutoIncrement>1</AutoIncrement>
       <NotNull>1</NotNull>
       <Position>1</Position>
       <StoredType>int|0s</StoredType>
     </column>
-    <column id="318" parent="304" name="NomeCategoria">
+    <column id="323" parent="305" name="NomeCategoria">
       <NotNull>1</NotNull>
       <Position>2</Position>
       <StoredType>varchar(100)|0s</StoredType>
     </column>
-    <column id="319" parent="304" name="Descricao">
+    <column id="324" parent="305" name="Descricao">
       <NotNull>1</NotNull>
       <Position>3</Position>
       <StoredType>text|0s</StoredType>
     </column>
-    <index id="320" parent="304" name="PRIMARY">
+    <index id="325" parent="305" name="PRIMARY">
       <ColNames>idCategoria</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <key id="321" parent="304" name="PRIMARY">
+    <key id="326" parent="305" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
-    <column id="322" parent="305" name="idHistorico">
+    <column id="327" parent="306" name="idHistorico">
       <AutoIncrement>1</AutoIncrement>
       <NotNull>1</NotNull>
       <Position>1</Position>
       <StoredType>int|0s</StoredType>
     </column>
-    <column id="323" parent="305" name="idProduto">
+    <column id="328" parent="306" name="idProduto">
       <NotNull>1</NotNull>
       <Position>2</Position>
       <StoredType>int|0s</StoredType>
     </column>
-    <column id="324" parent="305" name="NomeProduto">
+    <column id="329" parent="306" name="NomeProduto">
       <NotNull>1</NotNull>
       <Position>3</Position>
       <StoredType>varchar(100)|0s</StoredType>
     </column>
-    <column id="325" parent="305" name="QtdAntes">
+    <column id="330" parent="306" name="QtdAntes">
       <NotNull>1</NotNull>
       <Position>4</Position>
       <StoredType>int|0s</StoredType>
     </column>
-    <column id="326" parent="305" name="QtdDepois">
+    <column id="331" parent="306" name="QtdDepois">
       <NotNull>1</NotNull>
       <Position>5</Position>
       <StoredType>int|0s</StoredType>
     </column>
-    <column id="327" parent="305" name="TipoMovimentacao">
+    <column id="332" parent="306" name="TipoMovimentacao">
       <NotNull>1</NotNull>
       <Position>6</Position>
       <StoredType>varchar(20)|0s</StoredType>
     </column>
-    <column id="328" parent="305" name="Quantidade">
+    <column id="333" parent="306" name="Quantidade">
       <NotNull>1</NotNull>
       <Position>7</Position>
       <StoredType>int|0s</StoredType>
     </column>
-    <column id="329" parent="305" name="DataMovimentacao">
+    <column id="334" parent="306" name="DataMovimentacao">
       <DefaultExpression>CURRENT_TIMESTAMP</DefaultExpression>
       <Position>8</Position>
       <StoredType>datetime|0s</StoredType>
     </column>
-    <index id="330" parent="305" name="PRIMARY">
+    <index id="335" parent="306" name="PRIMARY">
       <ColNames>idHistorico</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <key id="331" parent="305" name="PRIMARY">
+    <key id="336" parent="306" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
-    <column id="332" parent="306" name="idMovimentacao">
+    <column id="337" parent="307" name="idMovimentacao">
       <AutoIncrement>1</AutoIncrement>
       <NotNull>1</NotNull>
       <Position>1</Position>
       <StoredType>int|0s</StoredType>
     </column>
-    <column id="333" parent="306" name="idProduto">
+    <column id="338" parent="307" name="idProduto">
       <NotNull>1</NotNull>
       <Position>2</Position>
       <StoredType>int|0s</StoredType>
     </column>
-    <column id="334" parent="306" name="QtdEstoque">
+    <column id="339" parent="307" name="QtdEstoque">
       <NotNull>1</NotNull>
       <Position>3</Position>
       <StoredType>int|0s</StoredType>
     </column>
-    <column id="335" parent="306" name="EntradaDeProduto">
+    <column id="340" parent="307" name="EntradaDeProduto">
       <NotNull>1</NotNull>
       <Position>4</Position>
       <StoredType>int|0s</StoredType>
     </column>
-    <column id="336" parent="306" name="SaidaDeProduto">
+    <column id="341" parent="307" name="SaidaDeProduto">
       <NotNull>1</NotNull>
       <Position>5</Position>
       <StoredType>int|0s</StoredType>
     </column>
-    <column id="337" parent="306" name="Movimentacaocol">
+    <column id="342" parent="307" name="Movimentacaocol">
       <NotNull>1</NotNull>
       <Position>6</Position>
       <StoredType>varchar(45)|0s</StoredType>
     </column>
-    <index id="338" parent="306" name="PRIMARY">
+    <index id="343" parent="307" name="PRIMARY">
       <ColNames>idMovimentacao</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <key id="339" parent="306" name="PRIMARY">
+    <key id="344" parent="307" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
-    <trigger id="340" parent="306" name="after_movimentacao_insert">
+    <trigger id="345" parent="307" name="after_movimentacao_insert">
       <Definer>root@%</Definer>
       <Events>I</Events>
       <SourceTextLength>880</SourceTextLength>
     </trigger>
-    <column id="341" parent="307" name="IdProduto">
+    <column id="346" parent="308" name="id">
+      <AutoIncrement>1</AutoIncrement>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <column id="347" parent="308" name="produto_id">
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+      <StoredType>int unsigned|0s</StoredType>
+    </column>
+    <column id="348" parent="308" name="tipo_movimentacao">
+      <NotNull>1</NotNull>
+      <Position>3</Position>
+      <StoredType>enum(&apos;ENTRADA&apos;, &apos;SAIDA&apos;)|0e</StoredType>
+    </column>
+    <column id="349" parent="308" name="quantidade">
+      <NotNull>1</NotNull>
+      <Position>4</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <column id="350" parent="308" name="data_movimentacao">
+      <DefaultExpression>CURRENT_TIMESTAMP</DefaultExpression>
+      <Position>5</Position>
+      <StoredType>timestamp|0s</StoredType>
+    </column>
+    <foreign-key id="351" parent="308" name="MovimentacaoEstoque_ibfk_1">
+      <ColNames>produto_id</ColNames>
+      <RefColNames>IdProduto</RefColNames>
+      <RefTableName>Produto</RefTableName>
+    </foreign-key>
+    <index id="352" parent="308" name="PRIMARY">
+      <ColNames>id</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="353" parent="308" name="produto_id">
+      <ColNames>produto_id</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="354" parent="308" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
+    </key>
+    <column id="355" parent="309" name="IdProduto">
       <AutoIncrement>1</AutoIncrement>
       <NotNull>1</NotNull>
       <Position>1</Position>
       <StoredType>int unsigned|0s</StoredType>
     </column>
-    <column id="342" parent="307" name="NomeProduto">
+    <column id="356" parent="309" name="NomeProduto">
       <NotNull>1</NotNull>
       <Position>2</Position>
       <StoredType>varchar(100)|0s</StoredType>
     </column>
-    <column id="343" parent="307" name="Descricao">
+    <column id="357" parent="309" name="Descricao">
       <Position>3</Position>
       <StoredType>text|0s</StoredType>
     </column>
-    <column id="344" parent="307" name="QtdEstoque">
+    <column id="358" parent="309" name="QtdEstoque">
       <NotNull>1</NotNull>
       <Position>4</Position>
       <StoredType>int unsigned|0s</StoredType>
     </column>
-    <column id="345" parent="307" name="PrecoDeCompra">
+    <column id="359" parent="309" name="PrecoDeCompra">
       <NotNull>1</NotNull>
       <Position>5</Position>
       <StoredType>decimal(10,2 digit)|0s</StoredType>
     </column>
-    <column id="346" parent="307" name="PrecoDeVenda">
+    <column id="360" parent="309" name="PrecoDeVenda">
       <NotNull>1</NotNull>
       <Position>6</Position>
       <StoredType>decimal(10,2 digit)|0s</StoredType>
     </column>
-    <index id="347" parent="307" name="PRIMARY">
+    <index id="361" parent="309" name="PRIMARY">
       <ColNames>IdProduto</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <key id="348" parent="307" name="PRIMARY">
+    <key id="362" parent="309" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
-    <trigger id="349" parent="307" name="VerificarEstoque">
+    <trigger id="363" parent="309" name="VerificarEstoque">
       <Definer>root@%</Definer>
       <Events>U</Events>
       <SourceTextLength>169</SourceTextLength>
     </trigger>
-    <column id="350" parent="308" name="Produto_IdProduto">
+    <column id="364" parent="310" name="Produto_IdProduto">
       <NotNull>1</NotNull>
       <Position>1</Position>
       <StoredType>int unsigned|0s</StoredType>
     </column>
-    <column id="351" parent="308" name="Categoria_idCategoria">
+    <column id="365" parent="310" name="Categoria_idCategoria">
       <NotNull>1</NotNull>
       <Position>2</Position>
       <StoredType>int|0s</StoredType>
     </column>
-    <foreign-key id="352" parent="308" name="fk_Produto_has_Categoria_Produto">
+    <foreign-key id="366" parent="310" name="fk_Produto_has_Categoria_Produto">
       <ColNames>Produto_IdProduto</ColNames>
       <RefColNames>IdProduto</RefColNames>
       <RefTableName>Produto</RefTableName>
     </foreign-key>
-    <foreign-key id="353" parent="308" name="fk_Produto_has_Categoria_Categoria1">
+    <foreign-key id="367" parent="310" name="fk_Produto_has_Categoria_Categoria1">
       <ColNames>Categoria_idCategoria</ColNames>
       <RefColNames>idCategoria</RefColNames>
       <RefTableName>Categoria</RefTableName>
     </foreign-key>
-    <index id="354" parent="308" name="PRIMARY">
+    <index id="368" parent="310" name="PRIMARY">
       <ColNames>Produto_IdProduto
 Categoria_idCategoria</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <index id="355" parent="308" name="fk_Produto_has_Categoria_Produto_idx">
+    <index id="369" parent="310" name="fk_Produto_has_Categoria_Produto_idx">
       <ColNames>Produto_IdProduto</ColNames>
       <Type>btree</Type>
     </index>
-    <index id="356" parent="308" name="fk_Produto_has_Categoria_Categoria1_idx">
+    <index id="370" parent="310" name="fk_Produto_has_Categoria_Categoria1_idx">
       <ColNames>Categoria_idCategoria</ColNames>
       <Type>btree</Type>
     </index>
-    <key id="357" parent="308" name="PRIMARY">
+    <key id="371" parent="310" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
