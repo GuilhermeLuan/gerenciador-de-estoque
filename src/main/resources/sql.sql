@@ -71,30 +71,40 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Produto_has_Categoria`
 -- -----------------------------------------------------
 -- Table `mydb`.`Movimentacao`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Movimentacao`
-(
-    `idMovimentacao`   INT         NOT NULL AUTO_INCREMENT,
-    `idProduto`        INT         NOT NULL,
-    `QtdEstoque`       INT         NOT NULL,
-    `EntradaDeProduto` INT         NOT NULL,
-    `SaidaDeProduto`   INT         NOT NULL,
-    `Movimentacaocol`  VARCHAR(45) NOT NULL,
-    PRIMARY KEY (`idMovimentacao`)
-)
-    ENGINE = InnoDB;
+# CREATE TABLE IF NOT EXISTS `mydb`.`Movimentacao`
+# (
+#     `idMovimentacao`   INT         NOT NULL AUTO_INCREMENT,
+#     `idProduto`        INT         NOT NULL,
+#     `QtdEstoque`       INT         NOT NULL,
+#     `EntradaDeProduto` INT         NOT NULL,
+#     `SaidaDeProduto`   INT         NOT NULL,
+#     `Movimentacaocol`  VARCHAR(45) NOT NULL,
+#     PRIMARY KEY (`idMovimentacao`)
+# )
+#     ENGINE = InnoDB;
+#
+# CREATE TABLE IF NOT EXISTS HistoricoMovimentacao
+# (
+#     idHistorico      INT AUTO_INCREMENT PRIMARY KEY,
+#     idProduto        INT          NOT NULL,
+#     NomeProduto      VARCHAR(100) NOT NULL,
+#     QtdAntes         INT          NOT NULL,
+#     QtdDepois        INT          NOT NULL,
+#     TipoMovimentacao VARCHAR(20)  NOT NULL, -- Entrada ou Saída
+#     Quantidade       INT          NOT NULL,
+#     DataMovimentacao DATETIME DEFAULT CURRENT_TIMESTAMP
+# );
 
-CREATE TABLE IF NOT EXISTS HistoricoMovimentacao
+
+CREATE TABLE  IF NOT EXISTS MovimentacaoEstoque
 (
-    idHistorico      INT AUTO_INCREMENT PRIMARY KEY,
-    idProduto        INT          NOT NULL,
-    NomeProduto      VARCHAR(100) NOT NULL,
-    QtdAntes         INT          NOT NULL,
-    QtdDepois        INT          NOT NULL,
-    TipoMovimentacao VARCHAR(20)  NOT NULL, -- Entrada ou Saída
-    Quantidade       INT          NOT NULL,
-    DataMovimentacao DATETIME DEFAULT CURRENT_TIMESTAMP
+    id                INT AUTO_INCREMENT PRIMARY KEY,
+    produto_id        INT UNSIGNED              NOT NULL,
+    tipo_movimentacao ENUM ('ENTRADA', 'SAIDA') NOT NULL,
+    quantidade        INT                       NOT NULL,
+    data_movimentacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (produto_id) REFERENCES Produto (IdProduto)
 );
-
 
 SET SQL_MODE = @OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS = @OLD_FOREIGN_KEY_CHECKS;
@@ -208,47 +218,42 @@ END //
 
 DELIMITER ;
 
-UPDATE Produto
-SET QtdEstoque = 1
-WHERE IdProduto = 1;
-
-
 -- Trigger - Entradas e Saidas
-DELIMITER $$
-
-CREATE TRIGGER after_movimentacao_insert
-    AFTER INSERT
-    ON Movimentacao
-    FOR EACH ROW
-BEGIN
-    DECLARE qtd_antes INT;
-
-    -- Buscar quantidade de estoque antes da movimentação
-    SELECT QtdEstoque
-    INTO qtd_antes
-    FROM Produto
-    WHERE IdProduto = NEW.idProduto;
-
-    -- Inserir no histórico
-    INSERT INTO HistoricoMovimentacao (idProduto,
-                                       NomeProduto,
-                                       QtdAntes,
-                                       QtdDepois,
-                                       TipoMovimentacao,
-                                       Quantidade)
-    VALUES (NEW.idProduto,
-            (SELECT NomeProduto FROM Produto WHERE IdProduto = NEW.idProduto),
-            qtd_antes,
-            NEW.QtdEstoque,
-            CASE
-                WHEN NEW.EntradaDeProduto > 0 THEN 'Entrada'
-                ELSE 'Saída'
-                END,
-            CASE
-                WHEN NEW.EntradaDeProduto > 0 THEN NEW.EntradaDeProduto
-                ELSE NEW.SaidaDeProduto
-                END);
-END$$
-
-DELIMITER ;
+# DELIMITER $$
+#
+# CREATE TRIGGER after_movimentacao_insert
+#     AFTER INSERT
+#     ON Movimentacao
+#     FOR EACH ROW
+# BEGIN
+#     DECLARE qtd_antes INT;
+#
+#     -- Buscar quantidade de estoque antes da movimentação
+#     SELECT QtdEstoque
+#     INTO qtd_antes
+#     FROM Produto
+#     WHERE IdProduto = NEW.idProduto;
+#
+#     -- Inserir no histórico
+#     INSERT INTO HistoricoMovimentacao (idProduto,
+#                                        NomeProduto,
+#                                        QtdAntes,
+#                                        QtdDepois,
+#                                        TipoMovimentacao,
+#                                        Quantidade)
+#     VALUES (NEW.idProduto,
+#             (SELECT NomeProduto FROM Produto WHERE IdProduto = NEW.idProduto),
+#             qtd_antes,
+#             NEW.QtdEstoque,
+#             CASE
+#                 WHEN NEW.EntradaDeProduto > 0 THEN 'Entrada'
+#                 ELSE 'Saída'
+#                 END,
+#             CASE
+#                 WHEN NEW.EntradaDeProduto > 0 THEN NEW.EntradaDeProduto
+#                 ELSE NEW.SaidaDeProduto
+#                 END);
+# END$$
+#
+# DELIMITER ;
 

@@ -5,6 +5,7 @@ import com.gerenciador.db.DbExecption;
 import com.gerenciador.model.entities.Produto;
 
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,7 +51,7 @@ public class Relatorio {
     }
 
     /**
-     * Gera um relatório de movimentações de estoque.
+     * Gera um relatório de movimentações de estoque chamando uma stored procedure.
      */
     public void movimentacaoEstoque() {
         PreparedStatement preparedStatement = null;
@@ -60,16 +61,14 @@ public class Relatorio {
 
             // Consulta SQL para obter as movimentações de estoque.
             String sql = """
-                    SELECT m.idMovimentacao   AS IDMovimentação,
-                           p.NomeProduto      AS Produto,
-                           m.EntradaDeProduto AS Entrada,
-                           m.SaidaDeProduto   AS Saída,
-                           m.QtdEstoque       AS EstoqueAtual,
-                           m.Movimentacaocol  AS Detalhes
-                    FROM Movimentacao m
-                             JOIN
-                         Produto p ON m.idProduto = p.IdProduto
-                    ORDER BY m.idMovimentacao DESC;""";
+                    SELECT m.Id                as "Id Movimentação",
+                           p.NomeProduto       as "Produto",
+                           m.tipo_movimentacao as "Tipo Movimentação",
+                           m.quantidade        as "Quantidade",
+                           m.data_movimentacao as "Data da Movimentação"
+                    FROM MovimentacaoEstoque m
+                             JOIN Produto p ON m.produto_id = p.IdProduto
+                    ORDER BY m.id DESC;""";
 
             preparedStatement = conn.prepareStatement(sql);
             rs = preparedStatement.executeQuery();
@@ -82,21 +81,19 @@ public class Relatorio {
 
             // Exibe os dados de cada movimentação.
             while (rs.next()) {
-                int idMovimentacao = rs.getInt("IDMovimentação");
+                int idMovimentacao = rs.getInt("Id Movimentação");
                 String produto = rs.getString("Produto");
-                Integer entrada = rs.getInt("Entrada");
-                Integer saida = rs.getInt("Saída");
-                Integer estoqueAtual = rs.getInt("EstoqueAtual");
-                String detalhes = rs.getString("Detalhes");
+                String tipoMovimentacao = rs.getString("Tipo Movimentação");
+                int quantidade = rs.getInt("Quantidade");
+                LocalDateTime dataDaMovimentacao = rs.getObject("Data da Movimentação", LocalDateTime.class);
 
 
                 System.out.println("===============================================");
                 System.out.println("ID Movimentação: " + idMovimentacao);
                 System.out.println("Produto: " + produto);
-                System.out.println("Entrada: " + entrada);
-                System.out.println("Saída: " + saida);
-                System.out.println("Estoque Atual: " + estoqueAtual);
-                System.out.println("Detalhes: " + detalhes);
+                System.out.println("TipoMovimentacao: " + tipoMovimentacao);
+                System.out.println("Quantidade: " + quantidade);
+                System.out.println("Data movimentação: " + dataDaMovimentacao);
                 System.out.println("===============================================");
 
             }

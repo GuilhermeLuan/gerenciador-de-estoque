@@ -12,7 +12,7 @@ DELIMITER //
 
 CREATE PROCEDURE RegistrarMovimentacao(
     IN p_produto_id INT,
-    IN p_tipo_movimentacao ENUM('ENTRADA', 'SAIDA'),
+    IN p_tipo_movimentacao ENUM ('ENTRADA', 'SAIDA'),
     IN p_quantidade INT
 )
 BEGIN
@@ -31,7 +31,8 @@ BEGIN
 
     ELSEIF p_tipo_movimentacao = 'SAIDA' THEN
         -- Verifica se há estoque suficiente
-        SELECT QtdEstoque INTO v_novo_estoque
+        SELECT QtdEstoque
+        INTO v_novo_estoque
         FROM Produto
         WHERE IdProduto = p_produto_id;
 
