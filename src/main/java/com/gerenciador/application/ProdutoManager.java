@@ -1,0 +1,286 @@
+package com.gerenciador.application;
+
+import com.gerenciador.db.DbExecption;
+import com.gerenciador.model.dao.CategoriaDao;
+import com.gerenciador.model.dao.DaoFactory;
+import com.gerenciador.model.dao.ProdutoDao;
+import com.gerenciador.model.entities.Categoria;
+import com.gerenciador.model.entities.Produto;
+
+import java.util.InputMismatchException;
+import java.util.List;
+import java.util.Scanner;
+
+import static com.gerenciador.utils.Assertions.*;
+
+public class ProdutoManager {
+
+    public static void gerenciarProdutos(Scanner scanner) {
+        int opcao = 0;
+        do {
+            try {
+                System.out.println("-------------------------------------------------------------");
+                System.out.println("GERENCIAMENTO DE PRODUTOS:");
+                System.out.println("1. Cadastrar Produto");
+                System.out.println("2. Editar Produto");
+                System.out.println("3. Excluir Produto");
+                System.out.println("4. Consultar Produto");
+                System.out.println("5. Voltar");
+                System.out.println("-------------------------------------------------------------");
+                System.out.print("Escolha uma opção: ");
+                opcao = scanner.nextInt();
+
+                switch (opcao) {
+                    case 1 -> cadastrarProduto(scanner);
+                    case 2 -> editarProduto(scanner);
+                    case 3 -> excluirProduto(scanner);
+                    case 4 -> consultarProduto(scanner);
+                    case 5 -> System.out.println("Voltando ao menu principal...");
+                    default -> System.out.println("Opção inválida. Tente novamente.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Entrada inválida! Por favor, insira um número.");
+                scanner.nextLine(); // Limpa o buffer
+            }
+        } while (opcao != 5);
+    }
+
+    private static void cadastrarProduto(Scanner scanner) {
+        ProdutoDao produtoDao = DaoFactory.createProdutoDao();
+        CategoriaDao categoriaDao = DaoFactory.createCategoriaDao();
+
+        try {
+            System.out.println("----- Cadastrar Produto -----");
+            System.out.print("Digite o nome do produto: ");
+            scanner.nextLine();
+            String nomeProduto = scanner.nextLine();
+
+            if (assertThatNameIsNotEmpty(nomeProduto)) return;
+
+            System.out.print("Digite a descrição do produto: ");
+            String descricao = scanner.nextLine();
+
+            if (assertThatDescriptionIsNotEmpty(descricao)) return;
+
+            System.out.print("Digite a quantidade em estoque: ");
+            int qtdEstoque = scanner.nextInt();
+
+            if (assertThatValueIsHigherThanZero(qtdEstoque)) return;
+
+            System.out.print("Digite o preço de compra: ");
+            double precoDeCompra = scanner.nextDouble();
+
+            if (assertThatValueIsHigherThanZero(precoDeCompra)) return;
+
+            System.out.print("Digite o preço de venda: ");
+            double precoDeVenda = scanner.nextDouble();
+
+            if (assertThatValueIsHigherThanZero(precoDeVenda)) return;
+
+
+//            System.out.print("Digite o ID da categoria: ");
+//            int idCategoria = scanner.nextInt();
+
+            System.out.print("Digite o nome da categoria: ");
+            scanner.nextLine();
+            String nomeDaCategoria = scanner.nextLine();
+
+            if (nomeDaCategoria.trim().isEmpty()) {
+                System.out.println("O nome do categoria não pode estar vazio.");
+                return;
+            }
+
+            Categoria categoria = categoriaDao.findByName(nomeDaCategoria);
+
+            if (categoria == null) {
+                // TODO -- Associar a categoria criada a tabela produto has categoria.
+
+                System.out.println("Categoria não encontrada. Vamos criar uma nova categoria para o produto.");
+
+
+                System.out.print("Digite a descrição da nova categoria: ");
+                String descricaoCategoria = scanner.nextLine();
+
+                if (descricaoCategoria.trim().isEmpty()) {
+                    System.out.println("A descrição da categoria não pode estar vazio.");
+                    return;
+                }
+
+                Categoria novaCategoria = new Categoria(nomeDaCategoria, descricaoCategoria);
+
+                categoriaDao.insert(novaCategoria);
+
+                System.out.printf("Nova categoria '%s' criada com sucesso!%n", novaCategoria.getNomeCategoria());
+
+//                List<Categoria> categorias = categoriaDao.findByNome(nomeCategoria);
+//                if (!categorias.isEmpty()) {
+//                    categoria = categorias.get(0); // Assume que o nome da categoria é único
+//                    System.out.printf("Categoria '%s' associada ao produto.\n", categoria.getNomeCategoria());
+//                } else {
+//                    System.out.println("Erro: Não foi possível associar a nova categoria ao produto.");
+//                }
+            }
+
+
+            Produto produto = new Produto(nomeProduto, descricao, qtdEstoque, precoDeCompra, precoDeVenda);
+            produtoDao.insert(produto);
+
+            System.out.println("Produto cadastrado com sucesso!");
+        } catch (InputMismatchException e) {
+            System.out.println("Entrada inválida! Por favor, insira valores corretos.");
+            scanner.nextLine(); // Limpa o buffer para evitar looping
+        } catch (DbExecption e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private static void editarProduto(Scanner scanner) {
+        try {
+            ProdutoDao produtoDao = DaoFactory.createProdutoDao();
+
+            System.out.println("----- Editar Produto -----");
+            System.out.print("Digite o ID do produto a ser editado: ");
+            int idProduto = scanner.nextInt();
+
+            if (assertThatValueIsHigherThanZero(idProduto)) return;
+
+
+            System.out.print("Digite o novo nome do produto: ");
+            scanner.nextLine();
+            String nomeProduto = scanner.nextLine();
+
+            if (assertThatNameIsNotEmpty(nomeProduto)) return;
+
+            System.out.print("Digite a nova descrição do produto: ");
+            String descricao = scanner.nextLine();
+
+            if (assertThatDescriptionIsNotEmpty(nomeProduto)) return;
+
+            System.out.print("Digite a nova quantidade em estoque: ");
+            int qtdEstoque = scanner.nextInt();
+
+            if (assertThatValueIsHigherThanZero(qtdEstoque)) return;
+
+
+            System.out.print("Digite o novo preço de compra: ");
+            double precoDeCompra = scanner.nextDouble();
+
+            if (assertThatValueIsHigherThanZero(precoDeCompra)) return;
+
+
+            System.out.print("Digite o novo preço de venda: ");
+            double precoDeVenda = scanner.nextDouble();
+
+            if (assertThatValueIsHigherThanZero(precoDeVenda)) return;
+
+
+            Produto produto = new Produto(idProduto, nomeProduto, descricao, qtdEstoque, precoDeCompra, precoDeVenda);
+            produtoDao.update(produto);
+
+            System.out.println("Produto atualizado com sucesso!");
+        } catch (DbExecption e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private static void excluirProduto(Scanner scanner) {
+        ProdutoDao produtoDao = DaoFactory.createProdutoDao();
+
+        try {
+            System.out.println("----- Excluir Produto -----");
+            System.out.print("Digite o ID do produto a ser excluído: ");
+            int idProduto = scanner.nextInt();
+
+            if (assertThatValueIsHigherThanZero(idProduto)) return;
+
+            produtoDao.deleteById(idProduto);
+
+            System.out.println("Produto excluído com sucesso!");
+        } catch (InputMismatchException e) {
+            System.out.println("Entrada inválida! Por favor, insira um número.");
+            scanner.nextLine(); // Limpa o buffer
+        }
+    }
+
+    private static void consultarProduto(Scanner scanner) {
+        ProdutoDao produtoDao = DaoFactory.createProdutoDao();
+        CategoriaDao categoriaDao = DaoFactory.createCategoriaDao();
+
+        try {
+            System.out.println("----- Consultar Produto -----");
+            System.out.println("1. Consultar por ID");
+            System.out.println("2. Consultar por Nome");
+            System.out.println("3. Consultar por Categoria ");
+            System.out.println("4. Consultar por Quantidade em estoque.");
+            System.out.println("5. Listar todos");
+            System.out.print("Escolha uma opção: ");
+            int opcao = scanner.nextInt();
+
+            switch (opcao) {
+                case 1 -> {
+                    System.out.print("Digite o ID do produto: ");
+                    int idProduto = scanner.nextInt();
+
+                    if (assertThatValueIsHigherThanZero(idProduto)) return;
+                    if (assertProdutoExitsById(produtoDao, idProduto)) return;
+
+                    Produto produto = produtoDao.findById(idProduto);
+                    System.out.println(produto);
+                }
+                case 2 -> {
+                    System.out.print("Digite o nome do produto: ");
+                    scanner.nextLine();
+                    String nomeProduto = scanner.nextLine();
+
+                    if (assertThatNameIsNotEmpty(nomeProduto)) return;
+
+
+                    List<Produto> produtos = produtoDao.findByNome(nomeProduto);
+
+                    produtos.forEach(System.out::println);
+                }
+                case 3 -> {
+                    System.out.print("Digite o nome do categoria: ");
+                    scanner.nextLine();
+                    String nomeCategoria = scanner.nextLine();
+
+                    if(assertThatNameIsNotEmpty(nomeCategoria)) return;
+
+                    Categoria categoria = categoriaDao.findByName(nomeCategoria);
+
+                    if (assertCategoriaExistByName(categoria)) return;
+
+                    List<Produto> produtos = produtoDao.findByCategoria(categoria);
+
+                    if (assertThatProdutoListIsNotEmpty(produtos)) return;
+
+                    produtos.forEach(System.out::println);
+                }
+                case 4 -> {
+                    System.out.print("Digite a quantiade em estoque: ");
+                    int qtdEstoque = scanner.nextInt();
+
+                    if (assertThatValueIsHigherThanZero(qtdEstoque)) return;
+
+
+                    List<Produto> produtos = produtoDao.findByQtdEstoque(qtdEstoque);
+
+                    if (assertThatProdutoListIsNotEmpty(produtos)) return;
+
+                    produtos.forEach(System.out::println);
+                }
+                case 5 -> {
+                    List<Produto> produtos = produtoDao.findAll();
+
+                    if (assertThatProdutoListIsNotEmpty(produtos)) return;
+
+                    produtos.forEach(System.out::println);
+                }
+                default -> System.out.println("Opção inválida.");
+            }
+        } catch (InputMismatchException e) {
+            System.out.println("Entrada inválida! Por favor, insira um número.");
+            scanner.nextLine(); // Limpa o buffer
+        }
+    }
+}

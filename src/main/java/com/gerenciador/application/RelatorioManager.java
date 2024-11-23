@@ -1,0 +1,63 @@
+package com.gerenciador.application;
+
+import com.gerenciador.model.dao.DaoFactory;
+import com.gerenciador.model.entities.Produto;
+import com.gerenciador.service.Relatorio;
+
+import java.util.List;
+import java.util.Scanner;
+
+import static com.gerenciador.utils.Assertions.assertThatCetegoriaListIsNotEmpty;
+import static com.gerenciador.utils.Assertions.assertThatProdutoListIsNotEmpty;
+
+public class RelatorioManager {
+    private static final Relatorio relatorio = DaoFactory.createRelatorio();
+
+    public static void gerarRelatorios(Scanner scanner) {
+        System.out.println("-------------------------------------------------------------");
+        System.out.println("GERAÇÃO DE RELATÓRIOS:");
+        System.out.println("1. Relatório de Produtos Cadastrados");
+        System.out.println("2. Relatório de Movimentação de Estoque");
+        System.out.println("3. Relatório de Produtos com Baixo Estoque");
+        System.out.println("4. Relatório de Vendas e Lucro");
+        System.out.println("5. Voltar");
+        System.out.println("-------------------------------------------------------------");
+        System.out.print("Escolha uma opção: ");
+        int opcao = scanner.nextInt();
+
+        switch (opcao) {
+            case 1 -> gerarRelatorioProdutos();
+            case 2 -> gerarRelatorioMovimentacao();
+            case 3 -> gerarRelatorioBaixoEstoque();
+            case 4 -> gerarRelatorioVendasLucro();
+            case 5 -> System.out.println("Voltando ao menu principal...");
+            default -> System.out.println("Opção inválida. Tente novamente.");
+        }
+    }
+
+    private static void gerarRelatorioProdutos() {
+        System.out.println("Relatório de Produtos Cadastrados");
+
+
+        List<Produto> produtos = relatorio.produtosCadastrados();
+
+        if (assertThatProdutoListIsNotEmpty(produtos)) return;
+
+
+        produtos.forEach(System.out::println);
+    }
+
+    private static void gerarRelatorioMovimentacao() {
+        System.out.println("Relatório de movimentação de estoque (entradas e saídas)");
+        relatorio.movimentacaoEstoque();
+    }
+
+    private static void gerarRelatorioBaixoEstoque() {
+        relatorio.relatorioBaixoEstoque(100);
+    }
+
+    private static void gerarRelatorioVendasLucro() {
+        System.out.println("Relatório de vendas e lucro (baseado no preço de compra e venda)");
+        relatorio.vendasELucros();
+    }
+}

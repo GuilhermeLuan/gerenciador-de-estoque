@@ -84,11 +84,9 @@ public class Relatorio {
                 System.out.println("===============================================");
 
             }
-
         } catch (SQLException e) {
             throw new DbExecption(e.getMessage());
         } finally {
-            DB.closeStatement(preparedStatement);
             DB.closeResultSet(rs);
         }
 
@@ -110,6 +108,11 @@ public class Relatorio {
             preparedStatement = conn.prepareStatement(sql);
             preparedStatement.setInt(1, estoqueMinimo);
             rs = preparedStatement.executeQuery();
+
+            if(!rs.next()) {
+                System.out.println("Nenhum produto encontrado!");
+                return;
+            }
 
             System.out.println("======== Relatório de Produtos com Baixo Estoque ========");
             while (rs.next()) {
@@ -139,6 +142,11 @@ public class Relatorio {
         try (CallableStatement stmt = conn.prepareCall(sql)) {
             ResultSet rs = stmt.executeQuery();
 
+            if(!rs.next()) {
+                System.out.println("Nenhuma venda foi encontrada!");
+                return;
+            }
+
             while (rs.next()) {
                 int produtoID = rs.getInt("ProdutoID");
                 String nome = rs.getString("Nome");
@@ -152,7 +160,7 @@ public class Relatorio {
             }
 
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao executar RelatorioVendasELucro: " + e.getMessage(), e);
+            throw new DbExecption("Erro ao executar RelatorioVendasELucro: " + e.getMessage());
         }
     }
 }

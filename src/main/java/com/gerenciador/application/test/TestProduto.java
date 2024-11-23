@@ -1,4 +1,4 @@
-package com.gerenciador.application;
+package com.gerenciador.application.test;
 
 import com.gerenciador.db.DbExecption;
 import com.gerenciador.model.dao.DaoFactory;
