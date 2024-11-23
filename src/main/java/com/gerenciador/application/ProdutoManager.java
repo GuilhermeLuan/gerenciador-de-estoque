@@ -247,6 +247,8 @@ public class ProdutoManager {
 
                     List<Produto> produtos = produtoDao.findByNome(nomeProduto);
 
+                    assertThatProdutoListIsNotEmpty(produtos);
+
                     produtos.forEach(System.out::println);
                 }
                 case 3 -> {

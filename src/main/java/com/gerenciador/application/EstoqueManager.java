@@ -2,6 +2,7 @@ package com.gerenciador.application;
 
 import com.gerenciador.model.dao.DaoFactory;
 import com.gerenciador.model.dao.MovimentacaoEstoqueDAO;
+import com.gerenciador.model.dao.ProdutoDao;
 import com.gerenciador.model.entities.MovimentacaoEstoque;
 import com.gerenciador.utils.Assertions;
 
@@ -12,6 +13,7 @@ import java.util.Scanner;
 import static com.gerenciador.utils.Assertions.*;
 
 public class EstoqueManager {
+
     public static void movimentacaoEstoque(Scanner scanner) {
         int opcao = 0;
         do {
@@ -40,19 +42,23 @@ public class EstoqueManager {
 
     private static void registrarEntrada(Scanner scanner) {
         MovimentacaoEstoqueDAO movimentacaoEstoque = DaoFactory.createMovimentacaoEstoque();
+        ProdutoDao produtoDao = DaoFactory.createProdutoDao();
+
         try {
             System.out.println("----- Registrar Entrada -----");
             System.out.print("Digite o ID do produto: ");
             int produtoId = scanner.nextInt();
             scanner.nextLine();
-            assertThatValueIsHigherThanZero(produtoId);
+            // Valida se a quantidade é positiva
+            if (assertThatValueIsHigherThanZero(produtoId)) return;
+            if (assertProdutoExitsById(produtoDao, produtoId)) return;
 
 
             System.out.print("Digite a quantidade de entrada: ");
             int quantidade = scanner.nextInt();
 
             // Valida se a quantidade é positiva
-            assertThatValueIsHigherThanZero(quantidade);
+            if (assertThatValueIsHigherThanZero(produtoId)) return;
 
             // Registra a movimentação de entrada
             movimentacaoEstoque.registrarMovimentacao(produtoId,
@@ -71,22 +77,22 @@ public class EstoqueManager {
 
     private static void registrarSaida(Scanner scanner) {
         MovimentacaoEstoqueDAO movimentacaoEstoque = DaoFactory.createMovimentacaoEstoque();
-
+        ProdutoDao produtoDao = DaoFactory.createProdutoDao();
 
         try {
             System.out.println("----- Registrar Saída -----");
             System.out.print("Digite o ID do produto: ");
             int produtoId = scanner.nextInt();
-            scanner.nextLine(); // Consome a quebra de linha deixada pelo nextInt()
+            scanner.nextLine();
+            // Consome a quebra de linha deixada pelo nextInt()
+            if (assertThatValueIsHigherThanZero(produtoId)) return;
+            if (assertProdutoExitsById(produtoDao, produtoId)) return;
 
             System.out.print("Digite a quantidade de saída: ");
             int quantidade = scanner.nextInt();
 
-            // Valida se a quantidade é positiva
-            if (quantidade <= 0) {
-                System.out.println("A quantidade deve ser maior que zero.");
-                return;
-            }
+            if (assertThatValueIsHigherThanZero(quantidade)) return;
+
 
             // Registra a movimentação de saída
             movimentacaoEstoque.registrarMovimentacao(produtoId,

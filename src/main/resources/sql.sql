@@ -57,13 +57,13 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Produto_has_Categoria`
     CONSTRAINT `fk_Produto_has_Categoria_Produto`
         FOREIGN KEY (`Produto_IdProduto`)
             REFERENCES `mydb`.`Produto` (`IdProduto`)
-            ON DELETE NO ACTION
-            ON UPDATE NO ACTION,
+            ON DELETE CASCADE
+            ON UPDATE CASCADE,
     CONSTRAINT `fk_Produto_has_Categoria_Categoria1`
         FOREIGN KEY (`Categoria_idCategoria`)
             REFERENCES `mydb`.`Categoria` (`idCategoria`)
-            ON DELETE NO ACTION
-            ON UPDATE NO ACTION
+            ON DELETE CASCADE
+            ON UPDATE CASCADE
 )
     ENGINE = InnoDB;
 
@@ -96,7 +96,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Produto_has_Categoria`
 # );
 
 
-CREATE TABLE  IF NOT EXISTS MovimentacaoEstoque
+CREATE TABLE IF NOT EXISTS `mydb`.MovimentacaoEstoque
 (
     id                INT AUTO_INCREMENT PRIMARY KEY,
     produto_id        INT UNSIGNED              NOT NULL,
@@ -120,16 +120,16 @@ END //
 DELIMITER ;
 
 -- II - Relatório de movimentação de estoque (entradas e saídas)
-SELECT m.idMovimentacao   AS IDMovimentação,
-       p.NomeProduto      AS Produto,
-       m.EntradaDeProduto AS Entrada,
-       m.SaidaDeProduto   AS Saída,
-       m.QtdEstoque       AS EstoqueAtual,
-       m.Movimentacaocol  AS Detalhes
-FROM Movimentacao m
-         JOIN
-     Produto p ON m.idProduto = p.IdProduto
-ORDER BY m.idMovimentacao DESC;
+# SELECT m.idMovimentacao   AS IDMovimentação,
+#        p.NomeProduto      AS Produto,
+#        m.EntradaDeProduto AS Entrada,
+#        m.SaidaDeProduto   AS Saída,
+#        m.QtdEstoque       AS EstoqueAtual,
+#        m.Movimentacaocol  AS Detalhes
+# FROM Movimentacao m
+#          JOIN
+#      Produto p ON m.idProduto = p.IdProduto
+# ORDER BY m.idMovimentacao DESC;
 
 -- III - Relatório de produtos com baixo estoque;
 DELIMITER //
@@ -143,29 +143,35 @@ BEGIN
 END //
 DELIMITER ;
 
--- CALL RelatorioProdutosBaixoEstoque(10);
--- CHAMAMENTO DA PROCEDURE COM LIMITE DE 10 UNDS
-
-
 -- IV - Relatório de vendas e lucro (baseado no preço de compra e venda).
 DELIMITER //
 
 CREATE PROCEDURE RelatorioVendasELucro()
 BEGIN
-    SELECT p.IdProduto                                                AS ProdutoID,
-           p.NomeProduto                                              AS Nome,
-           SUM(m.SaidaDeProduto)                                      AS QuantidadeVendida,
-           SUM(m.SaidaDeProduto * p.PrecoDeVenda)                     AS TotalVendas,
-           SUM(m.SaidaDeProduto * p.PrecoDeCompra)                    AS CustoTotal,
-           SUM(m.SaidaDeProduto * (p.PrecoDeVenda - p.PrecoDeCompra)) AS LucroTotal
-    FROM Produto p
-             JOIN
-         Movimentacao m ON p.IdProduto = m.idProduto
-    WHERE m.SaidaDeProduto > 0 -- Considera apenas saídas (vendas)
-    GROUP BY p.IdProduto, p.NomeProduto;
+    -- Verificar se há registros de saída na tabela MovimentacaoEstoque
+    IF (SELECT COUNT(*) FROM MovimentacaoEstoque WHERE tipo_movimentacao = 'SAIDA') = 0 THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Não há movimentações de saída registradas.';
+    ELSE
+        SELECT p.IdProduto                                                       AS ProdutoID,
+               p.NomeProduto                                                     AS Nome,
+               IFNULL(SUM(m.quantidade), 0)                                      AS QuantidadeVendida,
+               IFNULL(SUM(m.quantidade * p.PrecoDeVenda), 0)                     AS TotalVendas,
+               IFNULL(SUM(m.quantidade * p.PrecoDeCompra), 0)                    AS CustoTotal,
+               IFNULL(SUM(m.quantidade * (p.PrecoDeVenda - p.PrecoDeCompra)), 0) AS LucroTotal
+        FROM Produto p
+                 LEFT JOIN
+             MovimentacaoEstoque m
+             ON
+                 p.IdProduto = m.produto_id
+        WHERE m.tipo_movimentacao = 'SAIDA' -- Apenas registros com saída de produtos
+        GROUP BY p.IdProduto, p.NomeProduto;
+    END IF;
 END //
 
 DELIMITER ;
+
+CALl RelatorioVendasELucro();
 
 
 -- Procedure (OBRIGATORIA) para cadastrar os produtos
@@ -195,11 +201,34 @@ BEGIN
 END //
 DELIMITER ;
 
--- chamando a procedure
--- call CadastrarCategoria('Produtos de higiene', 'Produtos para higiene pessoal');
--- conferindo a inserção
-# select *
-# from Categoria;
+-- Procedure para o registro de movimentação.
+
+DELIMITER //
+CREATE PROCEDURE RegistroMovimentacao(
+    IN p_produto_id INT,
+    IN p_tipo_movimentacao ENUM ('ENTRADA', 'SAIDA'),
+    IN p_quantidade INT
+)
+BEGIN
+    IF p_tipo_movimentacao = 'ENTRADA' THEN
+        UPDATE Produto
+        SET QtdEstoque = QtdEstoque + p_quantidade
+        WHERE IdProduto = p_produto_id;
+
+        INSERT INTO MovimentacaoEstoque (produto_id, tipo_movimentacao, quantidade)
+        VALUES (p_produto_id, 'ENTRADA', p_quantidade);
+
+    ELSEIF p_tipo_movimentacao = 'SAIDA' THEN
+        UPDATE Produto
+        SET QtdEstoque = QtdEstoque - p_quantidade
+        WHERE IdProduto = p_produto_id;
+
+        INSERT INTO MovimentacaoEstoque (produto_id, tipo_movimentacao, quantidade)
+        VALUES (p_produto_id, 'SAIDA', p_quantidade);
+    END IF;
+END //
+
+DELIMITER ;
 
 
 -- trigger para Verificar Estoque Baixo: ao atualizar a quantidade em estoque de um Produto, deve ser disparado um alerta se a quantidad estiver abaixo do mínimo.
@@ -218,42 +247,4 @@ END //
 
 DELIMITER ;
 
--- Trigger - Entradas e Saidas
-# DELIMITER $$
-#
-# CREATE TRIGGER after_movimentacao_insert
-#     AFTER INSERT
-#     ON Movimentacao
-#     FOR EACH ROW
-# BEGIN
-#     DECLARE qtd_antes INT;
-#
-#     -- Buscar quantidade de estoque antes da movimentação
-#     SELECT QtdEstoque
-#     INTO qtd_antes
-#     FROM Produto
-#     WHERE IdProduto = NEW.idProduto;
-#
-#     -- Inserir no histórico
-#     INSERT INTO HistoricoMovimentacao (idProduto,
-#                                        NomeProduto,
-#                                        QtdAntes,
-#                                        QtdDepois,
-#                                        TipoMovimentacao,
-#                                        Quantidade)
-#     VALUES (NEW.idProduto,
-#             (SELECT NomeProduto FROM Produto WHERE IdProduto = NEW.idProduto),
-#             qtd_antes,
-#             NEW.QtdEstoque,
-#             CASE
-#                 WHEN NEW.EntradaDeProduto > 0 THEN 'Entrada'
-#                 ELSE 'Saída'
-#                 END,
-#             CASE
-#                 WHEN NEW.EntradaDeProduto > 0 THEN NEW.EntradaDeProduto
-#                 ELSE NEW.SaidaDeProduto
-#                 END);
-# END$$
-#
-# DELIMITER ;
-
+DELIMITER //

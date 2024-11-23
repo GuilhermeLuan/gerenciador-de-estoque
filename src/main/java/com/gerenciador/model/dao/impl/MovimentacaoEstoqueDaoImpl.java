@@ -24,7 +24,7 @@ public class MovimentacaoEstoqueDaoImpl implements MovimentacaoEstoqueDAO {
 
     @Override
     public void registrarMovimentacao(int produtoId, String tipoMovimentacao, int quantidade) {
-        String sql = "{CALL RegistrarMovimentacao(?, ?, ?)}";
+        String sql = "{CALL RegistroMovimentacao(?, ?, ?)}";
         try (CallableStatement stmt = conn.prepareCall(sql)) {
             stmt.setInt(1, produtoId);
             stmt.setString(2, tipoMovimentacao);
