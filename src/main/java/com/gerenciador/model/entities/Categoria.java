@@ -1,10 +1,16 @@
 package com.gerenciador.model.entities;
 
+/**
+ * Classe que representa uma Categoria no Banco de Dados.
+ */
 public class Categoria {
+    // Atributos da classe
+
     private int idCategoria;
     private String nomeCategoria;
     private String descricao;
 
+    //Construtores
     public Categoria(int idCategoria, String nomeCategoria, String descricao) {
         this.idCategoria = idCategoria;
         this.nomeCategoria = nomeCategoria;
@@ -19,6 +25,7 @@ public class Categoria {
     public Categoria() {
     }
 
+    // Métodos getter e setter
     public int getIdCategoria() {
         return idCategoria;
     }
@@ -43,15 +50,20 @@ public class Categoria {
         this.descricao = descricao;
     }
 
+    /**
+     * Sobrescreve o método toString para fornecer uma representação textual.
+     */
     @Override
     public String toString() {
-        return "Categoria {" + System.lineSeparator() +
+        return "Categoria " + System.lineSeparator() +
                "    ID Categoria: " + idCategoria + "," + System.lineSeparator() +
                "    Nome Categoria: '" + nomeCategoria + "'," + System.lineSeparator() +
-               "    Descrição: '" + descricao + "'" + System.lineSeparator() +
-               '}';
+               "    Descrição: '" + descricao + "'" + System.lineSeparator();
     }
 
+    /**
+     * Equals e HasCode para comprar objetos
+     */
     @Override
     public final boolean equals(Object o) {
         if (this == o) return true;

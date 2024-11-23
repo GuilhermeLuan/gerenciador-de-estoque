@@ -3,7 +3,12 @@ package com.gerenciador.model.entities;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+/**
+ * Classe que representa uma Historico de Movimentacao no Banco de Dados.
+ */
 public class HistoricoMovimentacao {
+
+    // Atributos da classe
     private Integer idHistorico;
     private Integer idProduto;
     private String nomeProduto;
@@ -13,6 +18,7 @@ public class HistoricoMovimentacao {
     private Integer quantidade;
     private LocalDateTime dataMovimentacao;
 
+    //Construtores
     public HistoricoMovimentacao() {
     }
 
@@ -36,6 +42,8 @@ public class HistoricoMovimentacao {
         this.quantidade = quantidade;
         this.dataMovimentacao = dataMovimentacao;
     }
+
+    // Métodos getter e setter
 
     public Integer getIdHistorico() {
         return idHistorico;
@@ -101,6 +109,9 @@ public class HistoricoMovimentacao {
         this.dataMovimentacao = dataMovimentacao;
     }
 
+    /**
+     * Sobrescreve o método toString para fornecer uma representação textual.
+     */
     @Override
     public String toString() {
         return "HistoricoMovimentacao{" +
@@ -115,6 +126,9 @@ public class HistoricoMovimentacao {
                '}';
     }
 
+    /**
+     * Equals e HasCode para comprar objetos
+     */
     @Override
     public final boolean equals(Object o) {
         if (this == o) return true;

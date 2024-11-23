@@ -10,7 +10,16 @@ import java.util.Scanner;
 
 import static com.gerenciador.utils.Assertions.*;
 
+/**
+ * Classe responsável pelo gerenciamento de categorias no sistema.
+ * Permite operações de CRUD através de um menu.
+ */
 public class CategoriaManager {
+
+    /**
+     * Método principal para gerenciar categorias.
+     * Exibe o menu para o usuário e redireciona para as operações correspondentes.
+     */
     public static void gerenciarCategorias(Scanner scanner) {
         int opcao = 0;
         do {
@@ -36,11 +45,14 @@ public class CategoriaManager {
                 }
             } catch (InputMismatchException e) {
                 System.out.println("Entrada inválida! Por favor, insira um número.");
-                scanner.nextLine(); // Limpa o buffer
+                scanner.nextLine();
             }
         } while (opcao != 5);
     }
 
+    /**
+     * Método para cadastrar uma nova categoria.
+     */
     private static void cadastrarCategoria(Scanner scanner) {
         CategoriaDao categoriaDao = DaoFactory.createCategoriaDao();
 
@@ -50,13 +62,16 @@ public class CategoriaManager {
             scanner.nextLine();
             String nomeCategoria = scanner.nextLine();
 
+            // Valida se o nome não está vazio
             if (assertThatNameIsNotEmpty(nomeCategoria)) return;
 
             System.out.print("Digite a descrição da categoria: ");
             String descricao = scanner.nextLine();
 
+            // Valida se a descrição não está vazia
             if (assertThatDescriptionIsNotEmpty(descricao)) return;
 
+            // Cria e insere a nova categoria
             Categoria categoria = new Categoria(nomeCategoria, descricao);
             categoriaDao.insert(categoria);
 
@@ -67,6 +82,9 @@ public class CategoriaManager {
         }
     }
 
+    /**
+     * Método para editar uma categoria existente.
+     */
     private static void editarCategoria(Scanner scanner) {
         CategoriaDao categoriaDao = DaoFactory.createCategoriaDao();
 
@@ -75,6 +93,7 @@ public class CategoriaManager {
             System.out.print("Digite o ID da categoria a ser editada: ");
             int idCategoria = scanner.nextInt();
 
+            // Valida o ID e verifica se a categoria existe
             if (assertThatValueIsHigherThanZero(idCategoria)) return;
             if (assertCategoriaExits(categoriaDao, idCategoria)) return;
 
@@ -89,16 +108,20 @@ public class CategoriaManager {
 
             if (assertThatDescriptionIsNotEmpty(descricao)) return;
 
+            // Atualiza a categoria no banco de dados
             Categoria categoria = new Categoria(idCategoria, nomeCategoria, descricao);
             categoriaDao.update(categoria);
 
             System.out.println("Categoria atualizada com sucesso!");
         } catch (InputMismatchException e) {
             System.out.println("Entrada inválida! Por favor, insira um número.");
-            scanner.nextLine(); // Limpa o buffer
+            scanner.nextLine();
         }
     }
 
+    /**
+     * Método para excluir uma categoria existente.
+     */
     private static void excluirCategoria(Scanner scanner) {
         CategoriaDao categoriaDao = DaoFactory.createCategoriaDao();
         try {
@@ -109,15 +132,20 @@ public class CategoriaManager {
             if (assertThatValueIsHigherThanZero(idCategoria)) return;
             if (assertCategoriaExits(categoriaDao, idCategoria)) return;
 
+            // Exclui a categoria
             System.out.println("Categoria excluida com sucesso!");
             categoriaDao.deleteById(idCategoria);
 
         } catch (InputMismatchException e) {
             System.out.println("Entrada inválida! Por favor, insira um número.");
-            scanner.nextLine(); // Limpa o buffer
+            scanner.nextLine();
         }
     }
 
+    /**
+     * Método para consultar categorias.
+     * Permite consultar por nome ou listar todas as categorias.
+     */
     private static void consultarCategoria(Scanner scanner) {
         CategoriaDao categoriaDao = DaoFactory.createCategoriaDao();
         try {
@@ -153,7 +181,7 @@ public class CategoriaManager {
 
         } catch (InputMismatchException e) {
             System.out.println("Entrada inválida! Por favor, insira um número.");
-            scanner.nextLine(); // Limpa o buffer
+            scanner.nextLine();
         }
     }
 }

@@ -2,6 +2,10 @@ package com.gerenciador.model.entities;
 
 import java.util.Objects;
 
+
+/**
+ * Classe que representa um Produto no Banco de Dados.
+ */
 public class Produto {
     private Integer idProduto;
     private String nomeProduto;
@@ -9,6 +13,8 @@ public class Produto {
     private Integer qtdEstoque;
     private Double precoDeCompra;
     private Double precoDeVenda;
+
+    //Construtores
 
     public Produto() {
     }
@@ -29,6 +35,8 @@ public class Produto {
         this.precoDeCompra = precoDeCompra;
         this.precoDeVenda = precoDeVenda;
     }
+
+    // Métodos getter e setter
 
     public Integer getIdProduto() {
         return idProduto;
@@ -78,6 +86,9 @@ public class Produto {
         this.precoDeVenda = precoDeVenda;
     }
 
+    /**
+     * Sobrescreve o método toString para fornecer uma representação textual.
+     */
     @Override
     public String toString() {
         return "Produto {" + System.lineSeparator() +
@@ -91,6 +102,9 @@ public class Produto {
     }
 
 
+    /**
+     * Equals e HasCode para comprar objetos
+     */
     @Override
     public final boolean equals(Object o) {
         if (this == o) return true;

@@ -10,21 +10,25 @@ import java.util.List;
 
 public class Relatorio {
 
-    private final Connection conn;
+    private final Connection conn; // Conexão com o banco de dados
 
     public Relatorio(Connection conn) {
         this.conn = conn;
     }
 
+    /**
+     * Gera uma lista de produtos cadastrados no sistema chamando uma stored procedure.
+     */
     public List<Produto> produtosCadastrados() {
-        String sql = "{CALL RelatorioDeProdutos()}";
+        String sql = "{CALL RelatorioDeProdutos()}"; // Chama a stored procedure.
 
-        List<Produto> produtos = new ArrayList<>();
+        List<Produto> produtos = new ArrayList<>();  // Lista para armazenar os produtos
 
         try (CallableStatement stmt = conn.prepareCall(sql)) {
-            ResultSet rs = stmt.executeQuery();
+            ResultSet rs = stmt.executeQuery(); // Executa a query.
 
             while (rs.next()) {
+                // Recupera os dados do produto.
                 int produtoID = rs.getInt("IdProduto");
                 String nome = rs.getString("NomeProduto");
                 String descricao = rs.getString("Descricao");
@@ -32,6 +36,7 @@ public class Relatorio {
                 Double precoDeCompra = rs.getDouble("PrecoDeCompra");
                 Double precoDeVenda = rs.getDouble("PrecoDeVenda");
 
+                // Cria um objeto Produto e adiciona à lista.
                 Produto produto = new Produto(produtoID, nome, descricao, quantidade, precoDeCompra, precoDeVenda);
 
                 produtos.add(produto);
@@ -39,16 +44,21 @@ public class Relatorio {
             }
             return produtos;
         } catch (SQLException e) {
+            // Lança uma exceção em caso de erro na execução da stored procedure.
             throw new RuntimeException("Erro ao executar Relatorio de Produtos Cadastrados: " + e.getMessage(), e);
         }
     }
 
+    /**
+     * Gera um relatório de movimentações de estoque.
+     */
     public void movimentacaoEstoque() {
         PreparedStatement preparedStatement = null;
         ResultSet rs = null;
 
         try {
 
+            // Consulta SQL para obter as movimentações de estoque.
             String sql = """
                     SELECT m.idMovimentacao   AS IDMovimentação,
                            p.NomeProduto      AS Produto,
@@ -64,11 +74,13 @@ public class Relatorio {
             preparedStatement = conn.prepareStatement(sql);
             rs = preparedStatement.executeQuery();
 
+            // Verifica se há resultados na consulta.
             if (!rs.isBeforeFirst()) {
                 System.out.println("Nenhuma movimentação de estoque encontrada!");
                 return;
             }
 
+            // Exibe os dados de cada movimentação.
             while (rs.next()) {
                 int idMovimentacao = rs.getInt("IDMovimentação");
                 String produto = rs.getString("Produto");
@@ -91,12 +103,16 @@ public class Relatorio {
         } catch (SQLException e) {
             throw new DbExecption(e.getMessage());
         } finally {
+            // Fecha os recursos abertos (ResultSet e Statement).
             DB.closeResultSet(rs);
             DB.closeStatement(preparedStatement);
         }
 
     }
 
+    /**
+     * Gera um relatório de produtos com baixo estoque chamando uma stored procedure.
+     */
     public void relatorioBaixoEstoque(int estoqueMinimo) {
 
         String sql = "{CALL RelatorioBaixoEstoque(?)}"; // Chama a stored procedure
@@ -132,7 +148,9 @@ public class Relatorio {
         }
     }
 
-
+    /**
+     * Gera um relatório de vendas e lucros chamando uma stored procedure.
+     */
     public void vendasELucros() {
         String sql = "{CALL RelatorioVendasELucro()}";
 

@@ -10,8 +10,10 @@ import java.util.Scanner;
 import static com.gerenciador.utils.Assertions.assertThatProdutoListIsNotEmpty;
 
 public class RelatorioManager {
+    // Instância de Relatorio obtida via DaoFactory
     private static final Relatorio relatorio = DaoFactory.createRelatorio();
 
+    // Método principal que exibe o menu de relatórios
     public static void gerarRelatorios(Scanner scanner) {
         System.out.println("-------------------------------------------------------------");
         System.out.println("GERAÇÃO DE RELATÓRIOS:");
@@ -34,29 +36,41 @@ public class RelatorioManager {
         }
     }
 
+    // Relatório de produtos cadastrados
     private static void gerarRelatorioProdutos() {
         System.out.println("Relatório de Produtos Cadastrados");
 
-
+        // Busca a lista de produtos cadastrados
         List<Produto> produtos = relatorio.produtosCadastrados();
 
+        // Verifica se a lista não está vazia
         if (assertThatProdutoListIsNotEmpty(produtos)) return;
 
-
+        // Imprime os produtos no console
         produtos.forEach(System.out::println);
     }
 
+    // Relatório de movimentação de estoque
     private static void gerarRelatorioMovimentacao() {
         System.out.println("Relatório de movimentação de estoque (entradas e saídas)");
+
+        // Realiza a lógica de movimentação via serviço de relatórios
         relatorio.movimentacaoEstoque();
     }
 
+    // Relatório de produtos com baixo estoque
     private static void gerarRelatorioBaixoEstoque() {
-        relatorio.relatorioBaixoEstoque(100);
+        int limiteEstoque = 100;
+
+        // Gera o relatório com base no limite
+        relatorio.relatorioBaixoEstoque(limiteEstoque);
     }
 
+    // Relatório de vendas e lucros
     private static void gerarRelatorioVendasLucro() {
         System.out.println("Relatório de vendas e lucro (baseado no preço de compra e venda)");
+
+        // Realiza a lógica de cálculo de vendas e lucros
         relatorio.vendasELucros();
     }
 }

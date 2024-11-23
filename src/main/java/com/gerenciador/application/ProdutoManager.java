@@ -15,6 +15,7 @@ import static com.gerenciador.utils.Assertions.*;
 
 public class ProdutoManager {
 
+    // Método principal que exibe o menu de gerenciamento de produtos
     public static void gerenciarProdutos(Scanner scanner) {
         int opcao = 0;
         do {
@@ -39,47 +40,50 @@ public class ProdutoManager {
                     default -> System.out.println("Opção inválida. Tente novamente.");
                 }
             } catch (InputMismatchException e) {
+                // Trata entradas inválidas, como letras ou caracteres especiais
+
                 System.out.println("Entrada inválida! Por favor, insira um número.");
-                scanner.nextLine(); // Limpa o buffer
+                scanner.nextLine();
             }
         } while (opcao != 5);
     }
 
+    // Método para cadastrar um novo produto
     private static void cadastrarProduto(Scanner scanner) {
         ProdutoDao produtoDao = DaoFactory.createProdutoDao();
         CategoriaDao categoriaDao = DaoFactory.createCategoriaDao();
 
         try {
+            // Captura os dados do produto
+
             System.out.println("----- Cadastrar Produto -----");
             System.out.print("Digite o nome do produto: ");
             scanner.nextLine();
             String nomeProduto = scanner.nextLine();
 
-            if (assertThatNameIsNotEmpty(nomeProduto)) return;
+            if (assertThatNameIsNotEmpty(nomeProduto)) return; // Valida o nome
 
             System.out.print("Digite a descrição do produto: ");
             String descricao = scanner.nextLine();
 
-            if (assertThatDescriptionIsNotEmpty(descricao)) return;
+            if (assertThatDescriptionIsNotEmpty(descricao)) return; // Valida a descrição
 
             System.out.print("Digite a quantidade em estoque: ");
             int qtdEstoque = scanner.nextInt();
 
-            if (assertThatValueIsHigherThanZero(qtdEstoque)) return;
+            if (assertThatValueIsHigherThanZero(qtdEstoque)) return; // Valida a quantidade
 
             System.out.print("Digite o preço de compra: ");
             double precoDeCompra = scanner.nextDouble();
 
-            if (assertThatValueIsHigherThanZero(precoDeCompra)) return;
+            if (assertThatValueIsHigherThanZero(precoDeCompra)) return; // Valida o preço de compra
 
             System.out.print("Digite o preço de venda: ");
             double precoDeVenda = scanner.nextDouble();
 
-            if (assertThatValueIsHigherThanZero(precoDeVenda)) return;
+            if (assertThatValueIsHigherThanZero(precoDeVenda)) return; // Valida o preço de venda
 
-
-//            System.out.print("Digite o ID da categoria: ");
-//            int idCategoria = scanner.nextInt();
+            // Captura ou cria a categoria associada
 
             System.out.print("Digite o nome da categoria: ");
             scanner.nextLine();
@@ -90,6 +94,7 @@ public class ProdutoManager {
                 return;
             }
 
+            // Busca a categoria pelo nome
             Categoria categoria = categoriaDao.findByName(nomeDaCategoria);
 
             if (categoria == null) {
@@ -128,11 +133,16 @@ public class ProdutoManager {
             System.out.println("Produto cadastrado com sucesso!");
         } catch (InputMismatchException e) {
             System.out.println("Entrada inválida! Por favor, insira valores corretos.");
-            scanner.nextLine(); // Limpa o buffer para evitar looping
+            scanner.nextLine();
         } catch (DbExecption e) {
             System.out.println(e.getMessage());
         }
     }
+
+    // Métodos editarProduto, excluirProduto e consultarProduto seguem lógica semelhante:
+    // - Validam entradas do usuário.
+    // - Interagem com o banco via DAOs.
+    // - Lidam com exceções específicas.
 
     private static void editarProduto(Scanner scanner) {
         try {
@@ -198,7 +208,7 @@ public class ProdutoManager {
             System.out.println("Produto excluído com sucesso!");
         } catch (InputMismatchException e) {
             System.out.println("Entrada inválida! Por favor, insira um número.");
-            scanner.nextLine(); // Limpa o buffer
+            scanner.nextLine();
         }
     }
 
@@ -280,7 +290,7 @@ public class ProdutoManager {
             }
         } catch (InputMismatchException e) {
             System.out.println("Entrada inválida! Por favor, insira um número.");
-            scanner.nextLine(); // Limpa o buffer
+            scanner.nextLine();
         }
     }
 }
