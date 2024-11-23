@@ -115,7 +115,7 @@ public class ProdutoDaoImpl implements ProdutoDao {
             DB.closeStatement(ps);
         }
     }
-    
+
     /**
      * Busca um Produto com base no ID fornecido.
      */
@@ -124,7 +124,7 @@ public class ProdutoDaoImpl implements ProdutoDao {
         String sql = "SELECT * FROM Produto WHERE IdProduto = ?";
         Produto produto = null;
 
-        try (PreparedStatement ps = conn.prepareStatement(sql)) { 
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id); // Define o ID da produto
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
@@ -137,7 +137,7 @@ public class ProdutoDaoImpl implements ProdutoDao {
 
         return produto;
     }
-    
+
     /**
      * Busca um Produto com base no Nome.
      */

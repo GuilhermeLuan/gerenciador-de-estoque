@@ -7,7 +7,6 @@ import com.gerenciador.service.Relatorio;
 import java.util.List;
 import java.util.Scanner;
 
-import static com.gerenciador.utils.Assertions.assertThatCetegoriaListIsNotEmpty;
 import static com.gerenciador.utils.Assertions.assertThatProdutoListIsNotEmpty;
 
 public class RelatorioManager {

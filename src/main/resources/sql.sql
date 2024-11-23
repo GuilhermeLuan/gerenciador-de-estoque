@@ -123,7 +123,7 @@ ORDER BY m.idMovimentacao DESC;
 
 -- III - Relatório de produtos com baixo estoque;
 DELIMITER //
-CREATE PROCEDURE RelatorioBaixoEstoque(IN estoqueMinimo INT )
+CREATE PROCEDURE RelatorioBaixoEstoque(IN estoqueMinimo INT)
 BEGIN
     SELECT IdProduto   AS 'ID',
            NomeProduto AS 'Nome do Produto',
@@ -213,44 +213,41 @@ SET QtdEstoque = 1
 WHERE IdProduto = 1;
 
 
-
 -- Trigger - Entradas e Saidas
 DELIMITER $$
 
 CREATE TRIGGER after_movimentacao_insert
-    AFTER INSERT ON Movimentacao
+    AFTER INSERT
+    ON Movimentacao
     FOR EACH ROW
 BEGIN
     DECLARE qtd_antes INT;
 
     -- Buscar quantidade de estoque antes da movimentação
-    SELECT QtdEstoque INTO qtd_antes
+    SELECT QtdEstoque
+    INTO qtd_antes
     FROM Produto
     WHERE IdProduto = NEW.idProduto;
 
     -- Inserir no histórico
-    INSERT INTO HistoricoMovimentacao (
-        idProduto,
-        NomeProduto,
-        QtdAntes,
-        QtdDepois,
-        TipoMovimentacao,
-        Quantidade
-    )
-    VALUES (
-               NEW.idProduto,
-               (SELECT NomeProduto FROM Produto WHERE IdProduto = NEW.idProduto),
-               qtd_antes,
-               NEW.QtdEstoque,
-               CASE
-                   WHEN NEW.EntradaDeProduto > 0 THEN 'Entrada'
-                   ELSE 'Saída'
-                   END,
-               CASE
-                   WHEN NEW.EntradaDeProduto > 0 THEN NEW.EntradaDeProduto
-                   ELSE NEW.SaidaDeProduto
-                   END
-           );
+    INSERT INTO HistoricoMovimentacao (idProduto,
+                                       NomeProduto,
+                                       QtdAntes,
+                                       QtdDepois,
+                                       TipoMovimentacao,
+                                       Quantidade)
+    VALUES (NEW.idProduto,
+            (SELECT NomeProduto FROM Produto WHERE IdProduto = NEW.idProduto),
+            qtd_antes,
+            NEW.QtdEstoque,
+            CASE
+                WHEN NEW.EntradaDeProduto > 0 THEN 'Entrada'
+                ELSE 'Saída'
+                END,
+            CASE
+                WHEN NEW.EntradaDeProduto > 0 THEN NEW.EntradaDeProduto
+                ELSE NEW.SaidaDeProduto
+                END);
 END$$
 
 DELIMITER ;

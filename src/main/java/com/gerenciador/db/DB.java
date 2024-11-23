@@ -18,7 +18,6 @@ public class DB {
     /**
      * Faz a conexão com o banco de dados.
      * Se ainda não houver uma conexão, cria uma nova.
-     *
      */
 
     public static Connection getConnection() {
@@ -76,7 +75,6 @@ public class DB {
     /**
      * Carrega as propriedades do arquivo de configuração.
      * O arquivo deve estar localizado no caminho "src/main/resources/db.properties".
-     *
      */
     public static Properties loadProperties() {
         Properties properties = new Properties();

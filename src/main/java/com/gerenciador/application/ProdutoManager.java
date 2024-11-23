@@ -244,7 +244,7 @@ public class ProdutoManager {
                     scanner.nextLine();
                     String nomeCategoria = scanner.nextLine();
 
-                    if(assertThatNameIsNotEmpty(nomeCategoria)) return;
+                    if (assertThatNameIsNotEmpty(nomeCategoria)) return;
 
                     Categoria categoria = categoriaDao.findByName(nomeCategoria);
 

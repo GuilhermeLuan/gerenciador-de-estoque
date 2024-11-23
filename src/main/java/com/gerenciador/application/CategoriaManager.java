@@ -75,7 +75,7 @@ public class CategoriaManager {
             System.out.print("Digite o ID da categoria a ser editada: ");
             int idCategoria = scanner.nextInt();
 
-            if(assertThatValueIsHigherThanZero(idCategoria)) return;
+            if (assertThatValueIsHigherThanZero(idCategoria)) return;
             if (assertCategoriaExits(categoriaDao, idCategoria)) return;
 
             System.out.print("Digite o novo nome da categoria: ");
@@ -106,7 +106,7 @@ public class CategoriaManager {
             System.out.print("Digite o ID da categoria a ser excluida: ");
             int idCategoria = scanner.nextInt();
 
-            if(assertThatValueIsHigherThanZero(idCategoria)) return;
+            if (assertThatValueIsHigherThanZero(idCategoria)) return;
             if (assertCategoriaExits(categoriaDao, idCategoria)) return;
 
             System.out.println("Categoria excluida com sucesso!");

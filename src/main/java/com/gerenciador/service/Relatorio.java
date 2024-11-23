@@ -64,6 +64,10 @@ public class Relatorio {
             preparedStatement = conn.prepareStatement(sql);
             rs = preparedStatement.executeQuery();
 
+            if (!rs.isBeforeFirst()) {
+                System.out.println("Nenhuma movimentação de estoque encontrada!");
+                return;
+            }
 
             while (rs.next()) {
                 int idMovimentacao = rs.getInt("IDMovimentação");
@@ -88,28 +92,22 @@ public class Relatorio {
             throw new DbExecption(e.getMessage());
         } finally {
             DB.closeResultSet(rs);
+            DB.closeStatement(preparedStatement);
         }
 
     }
 
     public void relatorioBaixoEstoque(int estoqueMinimo) {
-        PreparedStatement preparedStatement = null;
+
+        String sql = "{CALL RelatorioBaixoEstoque(?)}"; // Chama a stored procedure
+
         ResultSet rs = null;
 
-        try {
-            String sql = """
-                    SELECT p.IdProduto       AS ID,
-                           p.NomeProduto     AS NomeProduto,
-                           p.QtdEstoque      AS QtdEstoque
-                    FROM Produto p
-                    WHERE p.QtdEstoque < ?
-                    ORDER BY p.QtdEstoque ASC;""";
+        try (CallableStatement stmt = conn.prepareCall(sql)) {
+            stmt.setInt(1, estoqueMinimo);
+            rs = stmt.executeQuery();
 
-            preparedStatement = conn.prepareStatement(sql);
-            preparedStatement.setInt(1, estoqueMinimo);
-            rs = preparedStatement.executeQuery();
-
-            if(!rs.next()) {
+            if (!rs.isBeforeFirst()) {
                 System.out.println("Nenhum produto encontrado!");
                 return;
             }
@@ -117,8 +115,8 @@ public class Relatorio {
             System.out.println("======== Relatório de Produtos com Baixo Estoque ========");
             while (rs.next()) {
                 int idProduto = rs.getInt("ID");
-                String nomeProduto = rs.getString("NomeProduto");
-                int qtdEstoque = rs.getInt("QtdEstoque");
+                String nomeProduto = rs.getString("Nome do Produto");
+                int qtdEstoque = rs.getInt("Quantidade em Estoque");
 
                 System.out.println("-----------------------------------------------");
                 System.out.println("ID Produto: " + idProduto);
@@ -130,7 +128,6 @@ public class Relatorio {
         } catch (SQLException e) {
             throw new DbExecption(e.getMessage());
         } finally {
-            DB.closeStatement(preparedStatement);
             DB.closeResultSet(rs);
         }
     }
@@ -142,7 +139,7 @@ public class Relatorio {
         try (CallableStatement stmt = conn.prepareCall(sql)) {
             ResultSet rs = stmt.executeQuery();
 
-            if(!rs.next()) {
+            if (!rs.isBeforeFirst()) {
                 System.out.println("Nenhuma venda foi encontrada!");
                 return;
             }

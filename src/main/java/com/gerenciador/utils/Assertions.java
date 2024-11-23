@@ -17,7 +17,7 @@ public class Assertions {
     }
 
     public static boolean assertProdutoExistByName(Produto produto) {
-        if(produto == null) {
+        if (produto == null) {
             System.out.println("Produto não encontrado!");
             return true;
         }
@@ -33,7 +33,7 @@ public class Assertions {
     }
 
     public static boolean assertCategoriaExistByName(Categoria categoria) {
-        if(categoria == null) {
+        if (categoria == null) {
             System.out.println("Categoria não encontrada!");
             return true;
         }
@@ -65,7 +65,7 @@ public class Assertions {
     }
 
     public static boolean assertThatProdutoListIsNotEmpty(List<Produto> produtos) {
-        if(produtos.isEmpty()) {
+        if (produtos.isEmpty()) {
             System.out.println("Nenhum produto encontrado!");
             return true;
         }
@@ -73,7 +73,7 @@ public class Assertions {
     }
 
     public static boolean assertThatCetegoriaListIsNotEmpty(List<Categoria> categorias) {
-        if(categorias.isEmpty()) {
+        if (categorias.isEmpty()) {
             System.out.println("Nenhuma categoria encontrada!");
             return true;
         }
