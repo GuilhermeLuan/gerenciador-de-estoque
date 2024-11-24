@@ -74,4 +74,8 @@ Utilitários para validações e tratamento de dados.
     password=admin
     dburl=jdbc:mysql://localhost:3306/mydb
     useSSL=false
-3. Execute o script `sql.sql` para criação do banco e das tabelas.
+3. Rode o Maven
+   ```bash
+   .\mvnw clean install
+4. Execute o script `sql.sql` para criação do banco e das tabelas.
+5. Inicie a aplicação
