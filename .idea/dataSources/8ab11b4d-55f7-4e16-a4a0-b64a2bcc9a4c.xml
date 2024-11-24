@@ -1073,7 +1073,7 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
       <CollationName>utf8mb3_general_ci</CollationName>
     </schema>
     <schema id="289" parent="1" name="mydb">
-      <LastIntrospectionLocalTimestamp>2024-11-23.23:09:07</LastIntrospectionLocalTimestamp>
+      <LastIntrospectionLocalTimestamp>2024-11-24.19:28:48</LastIntrospectionLocalTimestamp>
       <CollationName>utf8mb3_general_ci</CollationName>
     </schema>
     <schema id="290" parent="1" name="mysql">
@@ -1254,6 +1254,8 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
     </column>
     <foreign-key id="330" parent="306" name="MovimentacaoEstoque_ibfk_1">
       <ColNames>produto_id</ColNames>
+      <OnDelete>cascade</OnDelete>
+      <OnUpdate>cascade</OnUpdate>
       <RefColNames>IdProduto</RefColNames>
       <RefTableName>Produto</RefTableName>
     </foreign-key>

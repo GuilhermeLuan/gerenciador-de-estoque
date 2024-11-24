@@ -67,35 +67,6 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Produto_has_Categoria`
 )
     ENGINE = InnoDB;
 
-
--- -----------------------------------------------------
--- Table `mydb`.`Movimentacao`
--- -----------------------------------------------------
-# CREATE TABLE IF NOT EXISTS `mydb`.`Movimentacao`
-# (
-#     `idMovimentacao`   INT         NOT NULL AUTO_INCREMENT,
-#     `idProduto`        INT         NOT NULL,
-#     `QtdEstoque`       INT         NOT NULL,
-#     `EntradaDeProduto` INT         NOT NULL,
-#     `SaidaDeProduto`   INT         NOT NULL,
-#     `Movimentacaocol`  VARCHAR(45) NOT NULL,
-#     PRIMARY KEY (`idMovimentacao`)
-# )
-#     ENGINE = InnoDB;
-#
-# CREATE TABLE IF NOT EXISTS HistoricoMovimentacao
-# (
-#     idHistorico      INT AUTO_INCREMENT PRIMARY KEY,
-#     idProduto        INT          NOT NULL,
-#     NomeProduto      VARCHAR(100) NOT NULL,
-#     QtdAntes         INT          NOT NULL,
-#     QtdDepois        INT          NOT NULL,
-#     TipoMovimentacao VARCHAR(20)  NOT NULL, -- Entrada ou Saída
-#     Quantidade       INT          NOT NULL,
-#     DataMovimentacao DATETIME DEFAULT CURRENT_TIMESTAMP
-# );
-
-
 CREATE TABLE IF NOT EXISTS `mydb`.MovimentacaoEstoque
 (
     id                INT AUTO_INCREMENT PRIMARY KEY,
@@ -104,6 +75,8 @@ CREATE TABLE IF NOT EXISTS `mydb`.MovimentacaoEstoque
     quantidade        INT                       NOT NULL,
     data_movimentacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (produto_id) REFERENCES Produto (IdProduto)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
 );
 
 SET SQL_MODE = @OLD_SQL_MODE;
@@ -120,16 +93,14 @@ END //
 DELIMITER ;
 
 -- II - Relatório de movimentação de estoque (entradas e saídas)
-# SELECT m.idMovimentacao   AS IDMovimentação,
-#        p.NomeProduto      AS Produto,
-#        m.EntradaDeProduto AS Entrada,
-#        m.SaidaDeProduto   AS Saída,
-#        m.QtdEstoque       AS EstoqueAtual,
-#        m.Movimentacaocol  AS Detalhes
-# FROM Movimentacao m
-#          JOIN
-#      Produto p ON m.idProduto = p.IdProduto
-# ORDER BY m.idMovimentacao DESC;
+# SELECT m.Id                as "Id Movimentação",
+#        p.NomeProduto       as "Produto",
+#        m.tipo_movimentacao as "Tipo Movimentação",
+#        m.quantidade        as "Quantidade",
+#        m.data_movimentacao as "Data da Movimentação"
+# FROM MovimentacaoEstoque m
+#          JOIN Produto p ON m.produto_id = p.IdProduto
+# ORDER BY m.id DESC;
 
 -- III - Relatório de produtos com baixo estoque;
 DELIMITER //

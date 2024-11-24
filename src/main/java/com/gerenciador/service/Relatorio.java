@@ -139,7 +139,7 @@ public class Relatorio {
             }
 
         } catch (SQLException e) {
-            throw new DbExecption(e.getMessage());
+            System.out.println("Erro:" + e.getMessage());
         } finally {
             DB.closeResultSet(rs);
         }
@@ -172,7 +172,7 @@ public class Relatorio {
             }
 
         } catch (SQLException e) {
-            throw new DbExecption("Erro ao executar RelatorioVendasELucro: " + e.getMessage());
+            System.out.println(("Erro ao executar Relatorio Vendas E Lucro: " + e.getMessage()));
         }
     }
 }
