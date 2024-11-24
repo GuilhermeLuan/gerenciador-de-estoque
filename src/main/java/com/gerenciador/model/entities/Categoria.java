@@ -55,9 +55,9 @@ public class Categoria {
      */
     @Override
     public String toString() {
-        return "Categoria " + System.lineSeparator() +
-               "    ID Categoria: " + idCategoria + "," + System.lineSeparator() +
-               "    Nome Categoria: '" + nomeCategoria + "'," + System.lineSeparator() +
+        return System.lineSeparator() +
+               "    ID: " + idCategoria + "," + System.lineSeparator() +
+               "    Nome: '" + nomeCategoria + "'," + System.lineSeparator() +
                "    Descrição: '" + descricao + "'" + System.lineSeparator();
     }
 

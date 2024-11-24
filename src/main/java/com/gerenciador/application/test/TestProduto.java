@@ -12,6 +12,11 @@ public class TestProduto {
     public static void main(String[] args) {
         ProdutoDao produtoDao = DaoFactory.createProdutoDao();
 
+        Categoria objCategoria = new Categoria(
+                "Teste",
+                "Teste"
+        );
+
         System.out.println("----- Test Procedure Cadastro Produto -----");
 
         Produto produto = new Produto(
@@ -21,7 +26,7 @@ public class TestProduto {
                 3500.00,
                 4500.00
         );
-        produtoDao.insert(produto);
+        produtoDao.insert(produto, objCategoria);
         System.out.println();
 
         System.out.println("----- Test Update Produto -----");

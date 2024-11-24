@@ -91,14 +91,13 @@ public class Produto {
      */
     @Override
     public String toString() {
-        return "Produto {" + System.lineSeparator() +
-               "    ID Produto: " + idProduto + "," + System.lineSeparator() +
-               "    Nome Produto: '" + nomeProduto + "'," + System.lineSeparator() +
+        return System.lineSeparator() +
+               "    ID: " + idProduto + "," + System.lineSeparator() +
+               "    Nome: '" + nomeProduto + "'," + System.lineSeparator() +
                "    Descrição: '" + descricao + "'," + System.lineSeparator() +
                "    Quantidade em Estoque: " + qtdEstoque + "," + System.lineSeparator() +
                "    Preço de Compra: R$" + precoDeCompra + "," + System.lineSeparator() +
-               "    Preço de Venda: R$" + precoDeVenda + System.lineSeparator() +
-               '}';
+               "    Preço de Venda: R$" + precoDeVenda + System.lineSeparator();
     }
 
 

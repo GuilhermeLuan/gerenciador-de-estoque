@@ -12,7 +12,7 @@ public interface CategoriaDao {
     /**
      * Insere uma categoria no banco de dados.
      */
-    void insert(Categoria obj);
+    Categoria insert(Categoria obj);
 
 
     /**

@@ -89,16 +89,13 @@ public class ProdutoManager {
             scanner.nextLine();
             String nomeDaCategoria = scanner.nextLine();
 
-            if (nomeDaCategoria.trim().isEmpty()) {
-                System.out.println("O nome do categoria não pode estar vazio.");
-                return;
-            }
+            if (assertThatNameIsNotEmpty(nomeDaCategoria)) return;
+
 
             // Busca a categoria pelo nome
             Categoria categoria = categoriaDao.findByName(nomeDaCategoria);
 
             if (categoria == null) {
-                // TODO -- Associar a categoria criada a tabela produto has categoria.
 
                 System.out.println("Categoria não encontrada. Vamos criar uma nova categoria para o produto.");
 
@@ -106,29 +103,18 @@ public class ProdutoManager {
                 System.out.print("Digite a descrição da nova categoria: ");
                 String descricaoCategoria = scanner.nextLine();
 
-                if (descricaoCategoria.trim().isEmpty()) {
-                    System.out.println("A descrição da categoria não pode estar vazio.");
-                    return;
-                }
+                if (assertThatDescriptionIsNotEmpty(nomeDaCategoria)) return;
 
-                Categoria novaCategoria = new Categoria(nomeDaCategoria, descricaoCategoria);
+                categoria = new Categoria(nomeDaCategoria, descricaoCategoria);
 
-                categoriaDao.insert(novaCategoria);
+                categoria = categoriaDao.insert(categoria);
 
-                System.out.printf("Nova categoria '%s' criada com sucesso!%n", novaCategoria.getNomeCategoria());
-
-//                List<Categoria> categorias = categoriaDao.findByNome(nomeCategoria);
-//                if (!categorias.isEmpty()) {
-//                    categoria = categorias.get(0); // Assume que o nome da categoria é único
-//                    System.out.printf("Categoria '%s' associada ao produto.\n", categoria.getNomeCategoria());
-//                } else {
-//                    System.out.println("Erro: Não foi possível associar a nova categoria ao produto.");
-//                }
+                System.out.printf("Nova categoria '%s' criada com sucesso!%n", categoria.getNomeCategoria());
             }
 
 
             Produto produto = new Produto(nomeProduto, descricao, qtdEstoque, precoDeCompra, precoDeVenda);
-            produtoDao.insert(produto);
+            produtoDao.insert(produto, categoria);
 
             System.out.println("Produto cadastrado com sucesso!");
         } catch (InputMismatchException e) {

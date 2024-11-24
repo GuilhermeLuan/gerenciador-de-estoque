@@ -26,17 +26,26 @@ public class CategoriaDaoImpl implements CategoriaDao {
      * Insere uma nova Categoria no banco de dados utilizando uma Stored Procedure.
      */
     @Override
-    public void insert(Categoria obj) {
-        String sql = "{CALL CadastrarCategoria(?, ?)}"; // Chama a stored procedur
+    public Categoria insert(Categoria obj) {
+        String sql = "{CALL CadastrarCategoria(?, ?, ?)}"; // Adiciona o parâmetro de saída
 
         try (CallableStatement stmt = conn.prepareCall(sql)) {
+            // Configura os parâmetros de entrada
             stmt.setString(1, obj.getNomeCategoria());
             stmt.setString(2, obj.getDescricao());
 
+            // Configura o parâmetro de saída
+            stmt.registerOutParameter(3, java.sql.Types.INTEGER);
+
             stmt.execute(); // Executa a stored procedure
+
+            // Obtém o ID gerado
+            int idGerado = stmt.getInt(3);
+            obj.setIdCategoria(idGerado); // Define o ID no objeto
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao inserir produto usando stored procedure: " + e.getMessage(), e);
+            throw new DbExecption("Erro ao inserir categoria usando stored procedure: " + e.getMessage());
         }
+        return obj;
     }
 
     /**

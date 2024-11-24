@@ -73,7 +73,7 @@ public class CategoriaManager {
 
             // Cria e insere a nova categoria
             Categoria categoria = new Categoria(nomeCategoria, descricao);
-            categoriaDao.insert(categoria);
+            Categoria inserted = categoriaDao.insert(categoria);
 
             System.out.println("Categoria cadastrada com sucesso!");
         } catch (InputMismatchException e) {

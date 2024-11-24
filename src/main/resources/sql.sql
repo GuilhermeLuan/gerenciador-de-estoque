@@ -142,9 +142,6 @@ END //
 
 DELIMITER ;
 
-CALl RelatorioVendasELucro();
-
-
 -- Procedure (OBRIGATORIA) para cadastrar os produtos
 DELIMITER //
 CREATE PROCEDURE CadastrarProdutos(
@@ -152,11 +149,20 @@ CREATE PROCEDURE CadastrarProdutos(
     IN Descricao TEXT,
     IN QtdEstoque INT UNSIGNED,
     IN PrecoDeCompra DECIMAL(10, 2),
-    IN PrecoDeVenda DECIMAL(10, 2)
+    IN PrecoDeVenda DECIMAL(10, 2),
+    IN CategoriaId INT -- Parâmetro para a categoria
 )
 BEGIN
+    -- Inserção do produto
     INSERT INTO Produto (NomeProduto, Descricao, QtdEstoque, PrecoDeCompra, PrecoDeVenda)
     VALUES (NomeProduto, Descricao, QtdEstoque, PrecoDeCompra, PrecoDeVenda);
+
+    -- Captura do ID do produto inserido
+    SET @ProdutoId = LAST_INSERT_ID();
+
+    -- Inserção na tabela de associação Produto_has_Categoria
+    INSERT INTO Produto_has_Categoria (Produto_IdProduto, Categoria_idCategoria)
+    VALUES (@ProdutoId, CategoriaId);
 END //
 DELIMITER ;
 
@@ -164,13 +170,18 @@ DELIMITER ;
 DELIMITER //
 CREATE PROCEDURE CadastrarCategoria(
     IN NomeCategoria VARCHAR(100),
-    IN Descricao TEXT
+    IN Descricao TEXT,
+    OUT IdCategoria INT -- Parâmetro de saída
 )
 BEGIN
     INSERT INTO Categoria (NomeCategoria, Descricao)
     VALUES (NomeCategoria, Descricao);
+
+    -- Captura o último ID inserido
+    SET IdCategoria = LAST_INSERT_ID();
 END //
 DELIMITER ;
+
 
 -- Procedure para o registro de movimentação.
 

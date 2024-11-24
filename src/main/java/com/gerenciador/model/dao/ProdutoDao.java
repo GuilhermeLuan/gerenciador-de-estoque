@@ -13,7 +13,7 @@ public interface ProdutoDao {
     /**
      * Insere um produto no banco de dados.
      */
-    void insert(Produto obj);
+    void insert(Produto obj, Categoria categoria);
 
 
     /**

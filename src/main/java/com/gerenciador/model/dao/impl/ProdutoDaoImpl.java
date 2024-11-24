@@ -27,8 +27,8 @@ public class ProdutoDaoImpl implements ProdutoDao {
      * Insere um novo Produto no banco de dados utilizando um Stored Procedure.
      */
     @Override
-    public void insert(Produto obj) {
-        String sql = "{CALL CadastrarProdutos(?, ?, ?, ?, ?)}"; // Chama a stored procedure
+    public void insert(Produto obj, Categoria categoria) {
+        String sql = "{CALL CadastrarProdutos(?, ?, ?, ?, ?, ?)}"; // Chama a stored procedure
 
         try (CallableStatement stmt = conn.prepareCall(sql)) {
             stmt.setString(1, obj.getNomeProduto());
@@ -36,12 +36,13 @@ public class ProdutoDaoImpl implements ProdutoDao {
             stmt.setInt(3, obj.getQtdEstoque());
             stmt.setDouble(4, obj.getPrecoDeCompra());
             stmt.setDouble(5, obj.getPrecoDeVenda());
+            stmt.setInt(6, categoria.getIdCategoria());
 
 
             // Executar a procedure
             stmt.execute();
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao inserir produto usando stored procedure: " + e.getMessage(), e);
+            throw new DbExecption("Erro ao inserir produto usando stored procedure: " + e.getMessage());
         }
     }
 
