@@ -1,11 +1,7 @@
 package com.gerenciador.model.dao;
 
 import com.gerenciador.db.DB;
-import com.gerenciador.model.dao.impl.CategoriaDaoImpl;
-import com.gerenciador.model.dao.impl.MovimentacaoEstoqueDaoImpl;
-import com.gerenciador.model.dao.impl.ProdutoDaoImpl;
-import com.gerenciador.model.dao.impl.ProdutoHasCategoriaDaoImpl;
-import com.gerenciador.service.Relatorio;
+import com.gerenciador.model.dao.impl.UsuarioDaoImpl;
 
 /**
  * Esta classe fornece métodos para instanciar implementações
@@ -14,35 +10,9 @@ import com.gerenciador.service.Relatorio;
 public class DaoFactory {
 
     /**
-     * Cria e retorna uma instância de ProdutoDao.
+     * Cria e retorna uma instância de UsuarioDao.
      */
-    public static ProdutoDao createProdutoDao() {
-        return new ProdutoDaoImpl(DB.getConnection());
-    }
-
-    /**
-     * Cria e retorna uma instância de CategoriaDao.
-     */
-    public static CategoriaDao createCategoriaDao() {
-        return new CategoriaDaoImpl(DB.getConnection());
-    }
-
-    public static ProdutoHasCategoriaDao createProdutoHasCategoriaDao() {
-        return new ProdutoHasCategoriaDaoImpl(DB.getConnection());
-    }
-
-    /**
-     * Cria e retorna uma instância de RelatorioDao.
-     */
-    public static Relatorio createRelatorio() {
-        return new Relatorio(DB.getConnection());
-    }
-
-    /**
-     * Cria e retorna uma instância de MovimentacaoEstoqueDAO
-     */
-
-    public static MovimentacaoEstoqueDAO createMovimentacaoEstoque() {
-        return new MovimentacaoEstoqueDaoImpl(DB.getConnection());
+    public static UsuarioDao createUsuarioDao() {
+        return new UsuarioDaoImpl(DB.getConnection());
     }
 }
