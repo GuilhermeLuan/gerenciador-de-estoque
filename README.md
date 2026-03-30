@@ -30,6 +30,12 @@ Sistema simples de cadastro de usuários desenvolvido em Java para fins acadêmi
    ```bash
    ./mvnw test
    ```
+   
+   O projeto inclui 4 testes JUnit:
+   - ✅ Teste de conexão bem-sucedida
+   - ✅ Teste de falha com credenciais inválidas
+   - ✅ Teste de falha com banco inexistente
+   - ✅ Teste de falha com host inválido
 
 4. **Execute a aplicação de exemplo:**
    ```bash
